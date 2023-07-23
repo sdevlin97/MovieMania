@@ -8,14 +8,14 @@ class Aboutus extends Component {
           About Our Site
         </h3>
         <p className="text-[30px]">
-          <span className="underline">
+          <span className="underline  text-cyan-500 underline-offset-8">
             Introducing MovieMania, a website that brings the theater experience
             to your lap!
           </span>{" "}
           Discover your ideal film by selecting tags that match your
           preferences, from genres and moods to actors and themes. MovieMania
           then works its magic, generating a curated list of similar movies,{" "}
-          <span className="underline">
+          <span className="underline text-cyan-500 underline-offset-8">
             ensuring you never miss a blockbuster hit or hidden gem again and
             saving you time!
           </span>

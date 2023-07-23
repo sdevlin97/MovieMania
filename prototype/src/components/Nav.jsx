@@ -37,7 +37,7 @@ class Nav extends Component {
               <a
                 key={item.name}
                 href={item.href}
-                className=" font-bold leading-6 text-white hover:text-red-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
+                className=" font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
               >
                 {item.name}
               </a>
@@ -46,7 +46,7 @@ class Nav extends Component {
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a
               href="#"
-              className="font-bold leading-6 text-white hover:text-red-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
+              className="font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
             >
               Log in <span aria-hidden="true">&rarr;</span>
             </a>
