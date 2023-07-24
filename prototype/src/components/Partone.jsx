@@ -1,5 +1,6 @@
 import { Parallax } from "react-parallax";
 import { Link } from "react-router-dom";
+import Pop from "./Pop";
 
 const Partone = () => (
   <Parallax
