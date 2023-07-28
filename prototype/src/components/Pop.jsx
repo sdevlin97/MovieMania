@@ -1,11 +1,18 @@
 import React from "react";
 import { useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
 
 function Pop(props) {
   const [activeTab, setActiveTab] = useState("login");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+  };
+  const responseMessage = (response) => {
+    console.log(response);
+  };
+  const errorMessage = (error) => {
+    console.log(error);
   };
 
   return props.trigger ? (
@@ -39,14 +46,22 @@ function Pop(props) {
           {activeTab === "login" && (
             <div className="text-center mb-3">
               <p>Sign in with:</p>
-              {/* Login Form Inputs */}
+              <GoogleLogin
+                onSuccess={responseMessage}
+                onError={errorMessage}
+                theme="filled_blue"
+              />
             </div>
           )}
 
           {activeTab === "register" && (
             <div className="text-center mb-3">
               <p>Sign up with:</p>
-              {/* Register Form Inputs */}
+              <GoogleLogin
+                onSuccess={responseMessage}
+                onError={errorMessage}
+                text="signup_with"
+              />
             </div>
           )}
         </div>
