@@ -46,11 +46,8 @@ function Pop(props) {
           {activeTab === "login" && (
             <div className="text-center mb-3">
               <p>Sign in with:</p>
-              <GoogleLogin
-                onSuccess={responseMessage}
-                onError={errorMessage}
-                theme="filled_blue"
-              />
+              <h></h>
+              <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
             </div>
           )}
 
