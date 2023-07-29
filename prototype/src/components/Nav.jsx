@@ -11,7 +11,7 @@ const navigation = [
 class Nav extends Component {
   render() {
     return (
-      <header className="absolute inset-0 z-50 text-white">
+      <header className="absolute inset-0 z-10 text-white">
         <nav className="flex items-center justify-between h-20 p-2 lg:px-4 ">
           <div className="flex lg:flex-1">
             <a href="#" className="-m-1.5 p-1.5">

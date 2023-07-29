@@ -1,5 +1,5 @@
 import { Parallax } from "react-parallax";
-import Pop from "./Pop";
+import Logins from "./Logins";
 import { useState } from "react";
 
 function Parttwo() {
@@ -18,10 +18,10 @@ function Parttwo() {
         >
           Hello
         </button>
-        <Pop trigger={ButtonPopup} setTrigger={setButtonPopup}>
+        <Logins trigger={ButtonPopup} setTrigger={setButtonPopup}>
           <h1>popupssss</h1>
           <p>this is m y button trigger</p>
-        </Pop>
+        </Logins>
       </div>
     </Parallax>
   );
