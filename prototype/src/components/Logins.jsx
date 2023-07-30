@@ -20,7 +20,7 @@ function Logins(props) {
       <div className="backdrop-blur-lg rounded-xl relative p-8 w-full max-w-max border border-cyan-700">
         <button
           onClick={() => props.setTrigger(false)}
-          className=" absolute top-0 right-0 px-2 text-white border"
+          className="absolute top-0 right-0 px-2 text-white border border-cyan-700 bg-cyan-900 rounded-tr-lg rounded-bl-lg"
         >
           X
         </button>
