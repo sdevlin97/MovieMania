@@ -2,12 +2,13 @@ import React from "react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 import Logins from "./Logins";
+import { Link } from "react-router-dom";
 
 const navigation = [
-  { name: "Start", href: "#" },
-  { name: "My List", href: "#" },
-  { name: "Recommendations", href: "#" },
-  { name: "Browse", href: "#" },
+  { name: "Start", to: "#" },
+  { name: "My List", to: "#" },
+  { name: "Recommendations", to: "#" },
+  { name: "Browse", to: "/Browse" },
 ];
 
 function Nav() {
@@ -37,13 +38,13 @@ function Nav() {
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
+              to={item.to}
               className=" font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">

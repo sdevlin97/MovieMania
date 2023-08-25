@@ -1,10 +1,21 @@
 import { useState } from "react";
-import Imgs from "./components/Imgs";
+import Nav from "./components/Nav";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Partone from "./components/Partone";
+import Browse from "./components/Browse";
 
 function App() {
   return (
     <>
-      <Imgs></Imgs>
+      <Router>
+        <Nav></Nav>
+        <div className="">
+          <Routes>
+            <Route path="/" element={<Partone />} />
+            <Route path="/Browse" element={<Browse />} />
+          </Routes>
+        </div>
+      </Router>
     </>
   );
 }
