@@ -9,12 +9,21 @@ function Browse() {
         strength={800}
         className="relative h-screen bg-black"
       >
-        <div className=" h-m-[5] grid grid-flow-col gap-4">
-          ssss
+        <div className=" my-[300px] grid grid-flow-col gap-4  justify-center ">
           <div>
             <Card></Card>
           </div>
-          sss
+
+          <div>
+            <Card></Card>
+          </div>
+          <div>
+            <Card></Card>
+          </div>
+          <div>
+            <Card></Card>
+          </div>
+
           <div>
             <Card></Card>
           </div>

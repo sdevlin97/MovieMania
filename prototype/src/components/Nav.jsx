@@ -17,7 +17,7 @@ function Nav() {
   return (
     <div
       className={`absolute inset-0 ${
-        ButtonPopup ? "z-[50]" : "z-[10]"
+        ButtonPopup ? "z-[50]" : "z-[1]"
       } text-white`}
     >
       <nav className="flex items-center justify-between h-20 p-2 lg:px-4 ">
