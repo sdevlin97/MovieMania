@@ -22,7 +22,7 @@ function Partone() {
         <div className="my-20 flex items-center justify-center absolute h-screen w-full ">
           <button
             onClick={() => setButtonPopup(true)}
-            className="z-10  backdrop-blur-lg bg-transparent hover:bg-cyan-600 text-cyan-500 font-semibold hover:text-white py-2 px-4 border border-cyan-500 border-4 hover:border-transparent rounded-full text-[24px] hover:transition ease-in-out duration-300 hover:-translate-y-1"
+            className="  backdrop-blur-lg bg-transparent hover:bg-cyan-600 text-cyan-500 font-semibold hover:text-white py-2 px-4 border border-cyan-500 border-4 hover:border-transparent rounded-full text-[24px] hover:transition ease-in-out duration-300 hover:-translate-y-1"
           >
             Log In / Sign up
             <i className="fa-solid fa-right-to-bracket ml-2"></i>

@@ -16,7 +16,7 @@ function Logins(props) {
   };
 
   return props.trigger ? (
-    <div className="z-50 fixed top-0 left-0 w-full h-screen justify-center items-center flex">
+    <div className=" fixed top-0 left-0 w-full h-screen justify-center items-center flex">
       <div className="backdrop-blur-lg rounded-xl relative p-8 w-full max-w-max border border-cyan-700">
         <button
           onClick={() => props.setTrigger(false)}
