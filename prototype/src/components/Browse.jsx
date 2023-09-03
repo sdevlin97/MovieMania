@@ -1,6 +1,7 @@
 import { Parallax } from "react-parallax";
 import Tags from "./Tags";
 import SelectedTags from "./SelectedTags";
+import Card from "./Card";
 
 function Browse() {
   return (
@@ -10,7 +11,7 @@ function Browse() {
         strength={800}
         className="relative h-screen bg-black"
       >
-        <div className="text-white flex items-center h-20 p-2 lg:px-4 bg-black">
+        <div className="text-white flex items-center h-20 p-2 lg:px-4 bg-black ">
           Tags:
           <Tags></Tags>
         </div>
@@ -18,7 +19,9 @@ function Browse() {
           Selected Tags:
           <SelectedTags></SelectedTags>
         </div>
-        <div className="bg-black"></div>
+        <div className=" backdrop-blur ">
+          <Card></Card>
+        </div>
       </Parallax>
     </>
   );
