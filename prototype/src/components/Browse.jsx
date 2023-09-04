@@ -19,8 +19,18 @@ function Browse() {
           Selected Tags:
           <SelectedTags></SelectedTags>
         </div>
-        <div className=" backdrop-blur ">
+        <div className="backdrop-blur ">
           <Card></Card>
+        </div>
+        <div className="flex flex-col items-center justify-center mt-4">
+          <input
+            type="text"
+            placeholder="Enter a name for the list"
+            className="bg-white p-2 rounded-md shadow-md"
+          />
+          <button className="bg-blue-500 text-white rounded-md mt-2 px-20 py-4">
+            Save
+          </button>
         </div>
       </Parallax>
     </>
