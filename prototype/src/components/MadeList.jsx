@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 
-const MadeList = ({ savedName, nametags, onRemove }) => {
+const MadeList = ({ savedName, nametags, onRemove, onSelect }) => {
   const handleRemove = () => {
     onRemove(savedName);
+  };
+
+  const handleSelect = () => {
+    onSelect(nametags);
   };
 
   return (
@@ -23,6 +27,12 @@ const MadeList = ({ savedName, nametags, onRemove }) => {
           className="text-white bg-red-500 p-1 rounded"
         >
           Remove
+        </button>
+        <button
+          onClick={handleSelect}
+          className="text-white bg-green-500 p-1 rounded"
+        >
+          Select
         </button>
       </div>
     </div>
