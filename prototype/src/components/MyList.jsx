@@ -2,19 +2,153 @@ import React, { useState } from "react";
 import { Parallax } from "react-parallax";
 import MadeList from "./MadeList";
 import DevTag from "./DevTag"; // Updated import statement
+import Card from "./Card";
 
 const SavedList = [
   {
-    name: "list1",
-    nametags: ["dog", "dog", "dog", "dog"],
+    name: "Freind and me",
+    nametags: [
+      "Mind-Bending",
+      "Epic Romance",
+      "Sci-Fi Action",
+      "Quentin Tarantino",
+      "Time Travel",
+      "Thriller",
+      "Alternate Reality",
+      "Existential",
+      "Dystopian",
+      "Cyberpunk",
+      "Art House",
+      "Surreal",
+      "Mind-Bending",
+      "Epic Romance",
+      "Sci-Fi Action",
+      "Quentin Tarantino",
+      "Time Travel",
+      "Thriller",
+      "Alternate Reality",
+      "Existential",
+      "Dystopian",
+      "Cyberpunk",
+      "Art House",
+      "Surreal",
+    ],
   },
   {
-    name: "list2",
-    nametags: ["cat", "cat", "cat"],
+    name: "Cringo",
+    nametags: [
+      "Sci-Fi Fantasy",
+      "Dinosaur Adventure",
+      "Space Opera",
+      "Alien Invasion",
+      "Superpowers",
+      "Robots",
+      "Post-Apocalyptic",
+      "Virtual Reality",
+      "Extraterrestrial",
+      "Steampunk",
+      "Mythology",
+      "Time Loop",
+      "Sci-Fi Fantasy",
+      "Dinosaur Adventure",
+      "Space Opera",
+      "Alien Invasion",
+      "Superpowers",
+      "Robots",
+      "Post-Apocalyptic",
+      "Virtual Reality",
+      "Extraterrestrial",
+      "Steampunk",
+      "Mythology",
+      "Time Loop",
+    ],
   },
   {
-    name: "list3",
-    nametags: ["bird", "bird"],
+    name: "YOO",
+    nametags: [
+      "Prison Drama",
+      "Mafia Crime",
+      "Undercover Cop",
+      "Heist",
+      "Organized Crime",
+      "Gangster",
+      "Neo-Noir",
+      "Corruption",
+      "Betrayal",
+      "Revenge",
+      "Psychological",
+      "Caper",
+      "Prison Drama",
+      "Mafia Crime",
+      "Undercover Cop",
+      "Heist",
+      "Organized Crime",
+      "Gangster",
+      "Neo-Noir",
+      "Corruption",
+      "Betrayal",
+      "Revenge",
+      "Psychological",
+      "Caper",
+    ],
+  },
+  {
+    name: "Heros?",
+    nametags: [
+      "Superhero",
+      "Coming of Age",
+      "Animated",
+      "Mutants",
+      "High School",
+      "Inspirational",
+      "Teen Drama",
+      "Identity",
+      "Empowerment",
+      "Family",
+      "Supernatural",
+      "Friendship",
+      "Superhero",
+      "Coming of Age",
+      "Animated",
+      "Mutants",
+      "High School",
+      "Inspirational",
+      "Teen Drama",
+      "Identity",
+      "Empowerment",
+      "Family",
+      "Supernatural",
+      "Friendship",
+    ],
+  },
+  {
+    name: "list5",
+    nametags: [
+      "Classic Comedy",
+      "Historical Drama",
+      "Mystery Thriller",
+      "Film Noir",
+      "Whodunit",
+      "Screwball Comedy",
+      "Satire",
+      "Political Intrigue",
+      "Conspiracy",
+      "Romantic Comedy",
+      "Action Adventure",
+      "Spy",
+      "Classic Comedy",
+      "Historical Drama",
+      "Mystery Thriller",
+      "Film Noir",
+      "Whodunit",
+      "Screwball Comedy",
+      "Satire",
+      "Political Intrigue",
+      "Conspiracy",
+      "Romantic Comedy",
+      "Action Adventure",
+      "Spy",
+    ],
   },
 ];
 
@@ -35,7 +169,8 @@ const MyList = () => {
       <Parallax
         bgImage="./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg"
         strength={800}
-        className="relative h-screen bg-black"
+        className="relative bg-black"
+        style={{ minHeight: "100vh" }}
       >
         {lists.map((list, index) => (
           <div
@@ -51,8 +186,10 @@ const MyList = () => {
           </div>
         ))}
         <div className="text-white flex items-center h-20 p-2 lg:px-4 bg-black ">
-          Selected Tags:
-          <DevTag selectedTags={selectedTags} />
+          Selected: <DevTag selectedTags={selectedTags} />
+        </div>
+        <div className="backdrop-blur ">
+          <Card></Card>
         </div>
       </Parallax>
     </>
