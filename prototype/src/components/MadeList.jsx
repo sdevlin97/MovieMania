@@ -1,0 +1,32 @@
+import React, { useState } from "react";
+
+const MadeList = ({ savedName, nametags, onRemove }) => {
+  const handleRemove = () => {
+    onRemove(savedName);
+  };
+
+  return (
+    <div className="ml-[10px] hidden lg:flex lg:gap-x-12 overflow-x-auto py-[14px]">
+      <div className="flex space-x-4">
+        <div className=" text-white  bg-black ">{savedName}:</div>
+        {nametags.map((tag, index) => (
+          <div
+            key={index}
+            className=" font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1 "
+            style={{ whiteSpace: "nowrap" }}
+          >
+            |{tag}|
+          </div>
+        ))}
+        <button
+          onClick={handleRemove}
+          className="text-white bg-red-500 p-1 rounded"
+        >
+          Remove
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default MadeList;

@@ -5,8 +5,8 @@ import Logins from "./Logins";
 import { Link } from "react-router-dom";
 
 const navigation = [
-  { name: "Start", to: "#" },
-  { name: "My List", to: "#" },
+  { name: "Start", to: "../App" },
+  { name: "My List", to: "/MyList" },
   { name: "Recommendations", to: "#" },
   { name: "Browse", to: "/Browse" },
 ];
