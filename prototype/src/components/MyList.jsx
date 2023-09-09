@@ -172,6 +172,10 @@ const MyList = () => {
         className="relative bg-black"
         style={{ minHeight: "100vh" }}
       >
+        <div className="flex justify-center items-center text-lg text-black h-20 bg-black">
+          <h1 className="font-bold text-[60px]">Saved List</h1>
+        </div>
+
         {lists.map((list, index) => (
           <div
             key={index}
