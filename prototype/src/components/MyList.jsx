@@ -35,7 +35,7 @@ const SavedList = [
     ],
   },
   {
-    name: "Cringo",
+    name: "Kids Fav",
     nametags: [
       "Sci-Fi Fantasy",
       "Dinosaur Adventure",
@@ -64,7 +64,7 @@ const SavedList = [
     ],
   },
   {
-    name: "YOO",
+    name: "Crime Tags",
     nametags: [
       "Prison Drama",
       "Mafia Crime",
@@ -93,7 +93,7 @@ const SavedList = [
     ],
   },
   {
-    name: "Heros?",
+    name: "Heros",
     nametags: [
       "Superhero",
       "Coming of Age",
@@ -122,7 +122,7 @@ const SavedList = [
     ],
   },
   {
-    name: "list5",
+    name: "For Later",
     nametags: [
       "Classic Comedy",
       "Historical Drama",
