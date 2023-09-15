@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Partone from "./components/Partone";
 import Browse from "./components/Browse";
 import MyList from "./components/MyList";
+import Details from "./components/Details";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/" element={<Partone />} />
             <Route path="/Browse" element={<Browse />} />
             <Route path="/MyList" element={<MyList />} />
+            <Route path="/details" element={<Details />} />
           </Routes>
         </div>
       </Router>
