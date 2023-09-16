@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
 
 const tags = [
   { title: "The Dark Knight", rating: "8.5", poster: "./batmanfull.jpg" },
@@ -8,7 +8,6 @@ const tags = [
   { title: "Deadpool 2 ", rating: "9.3", poster: "./deadpool.jpg" },
   { title: "Spider-Man: No Way Home", rating: "9.5", poster: "./spider.jpg" },
   { title: "Thor Ragnarok", rating: "7.5", poster: "./thor.jpg" },
-  // Add more movie data here...
 ];
 
 const Card = () => {
@@ -36,7 +35,7 @@ const Card = () => {
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
-        left: scrollContainerRef.current.scrollLeft - 500, // Adjust the scroll distance as needed
+        left: scrollContainerRef.current.scrollLeft - 500, 
         behavior: "smooth",
       });
     }
@@ -63,7 +62,6 @@ const Card = () => {
         <div className="flex space-x-4 p-4 pr-16">
           {tags.map((movie, index) => (
             <Link to="/details" key={index}>
-              {/* Wrap the card with a Link */}
               <div className="p-4 rounded-lg shadow-md backdrop-blur-0 inline-block">
                 <img
                   src={movie.poster}
