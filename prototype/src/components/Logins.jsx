@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { GoogleLogin } from "@react-oauth/google";
+import { auth, createAccount, logIntoExistingAccount } from "../firebase"
 
 function Logins(props) {
   const [activeTab, setActiveTab] = useState("login");
@@ -14,6 +15,31 @@ function Logins(props) {
   const errorMessage = (error) => {
     console.log(error);
   };
+
+  // Siobahn's additions for log in functionality
+  const localAuth = auth;
+  console.log("The localAuth value is ", localAuth);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [userPassword, setUserPassword] = useState("");
+
+  function handleNameChange(e) {
+    setName(e.target.value);
+  }
+
+  function handleEmailChange(e)  {
+    setEmail(e.target.value);
+  }
+
+  function handleUserPasswordChange(e)  {
+    setUserPassword(e.target.value);
+  }
+
+  function saveChanges(e) {
+    handleNameChange(e);
+    handleEmailChange(e);
+    handleUserPasswordChange(e)
+  }
 
   return props.trigger ? (
     <div className=" fixed top-0 left-0 w-full h-screen justify-center items-center flex">
@@ -35,6 +61,8 @@ function Logins(props) {
                 <input
                   id="email"
                   type="email"
+                  onChange={handleEmailChange}
+                  value={email}
                   className=" text-white border bg-transparent border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
                 />
                 <i className="fa-solid fa-envelope text-cyan-300 absolute my-3 -mx-7"></i>
@@ -47,6 +75,8 @@ function Logins(props) {
                 <input
                   id="password"
                   type="password"
+                  onChange={handleUserPasswordChange}
+                  value={userPassword}
                   className="border text-white bg-transparent border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
                 />
                 <i class="fa-solid fa-lock text-cyan-300 absolute my-3 -mx-7"></i>
@@ -54,6 +84,7 @@ function Logins(props) {
               <button
                 className={`w-full h-10 bg-cyan-600 rounded-md font-medium text-[1em] text-white mb-2
                 ${activeTab === "login" ? "focus:border-green-300" : ""}`}
+                onClick={logIntoExistingAccount(localAuth, email, userPassword)}
               >
                 Login
               </button>
@@ -77,6 +108,8 @@ function Logins(props) {
                 <input
                   id="name"
                   type="text"
+                  onChange={handleNameChange}
+                  value={name}
                   className="border text-white bg-transparent  border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
                 />
                 <i className="fa-solid fa-user text-cyan-300 absolute my-3 -mx-7"></i>
@@ -89,6 +122,8 @@ function Logins(props) {
                 <input
                   id="email"
                   type="email"
+                  onChange={handleEmailChange}
+                  value={email}
                   className="border text-white bg-transparent border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
                 />
                 <i className="fa-solid fa-envelope text-cyan-300 absolute my-3 -mx-7"></i>
@@ -101,6 +136,8 @@ function Logins(props) {
                 <input
                   id="password"
                   type="password"
+                  onChange={handleUserPasswordChange}
+                  value={userPassword}
                   className="border text-white bg-transparent border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
                 />
                 <i class="fa-solid fa-lock text-cyan-300 absolute my-3 -mx-7"></i>
@@ -122,6 +159,7 @@ function Logins(props) {
               <button
                 className={`w-full h-10 bg-cyan-600 rounded-md font-medium text-[1em] text-white mb-2
                 ${activeTab === "login" ? "focus:border-green-300" : ""}`}
+                onClick={createAccount(localAuth, name, email, userPassword)}
               >
                 Create Account
               </button>
