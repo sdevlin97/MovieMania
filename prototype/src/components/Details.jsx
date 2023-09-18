@@ -30,20 +30,15 @@ const Details = () => {
   ];
 
   return (
-    <div className="flex flex-wrap justify-center">
+    <div className="flex flex-wrap justify-center bg-black">
       {tags.map((movie, index) => (
-        <div
-          key={index}
-          className="p-4 backdrop-blur-md rounded-lg mx-2 my-4"
-          style={{ width: "300px", flex: "1 1 300px" }}
-        >
+        <div key={index} className="p-4 backdrop-blur-md rounded-lg mx-2 my-4 ">
           {showTrailer ? (
             <div>
               <video
                 src="batmantrailer.mp4"
                 controls
                 className="mx-auto w-full rounded-md mb-2"
-                style={{ maxHeight: "400px", maxWidth: "100%" }}
               />
               <button
                 onClick={() => setShowTrailer(false)}
@@ -58,7 +53,12 @@ const Details = () => {
                 src={movie.poster}
                 alt={movie.title}
                 className="mx-auto w-full rounded-md mb-2"
-                style={{ maxHeight: "400px", width: "auto", maxWidth: "100%" }}
+                style={{
+                  height: "auto",
+                  maxHeight: "50%",
+                  width: "auto",
+                  maxWidth: "50%",
+                }}
               />
               <button
                 onClick={() => setShowTrailer(true)}
