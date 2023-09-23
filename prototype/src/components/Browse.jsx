@@ -4,13 +4,16 @@ import SelectedTags from "./SelectedTags";
 import Card from "./Card";
 
 function Browse() {
+  const containerStyle = {
+    backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundAttachment: "fixed",
+  };
+
   return (
     <>
-      <Parallax
-        bgImage="./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg"
-        strength={800}
-        className="relative h-screen bg-black"
-      >
+      <div style={containerStyle} className="relative h-screen bg-black">
         <div className="text-white flex items-center h-20 p-2 lg:px-4 bg-black ">
           Tags:
           <Tags></Tags>
@@ -32,7 +35,7 @@ function Browse() {
             Save
           </button>
         </div>
-      </Parallax>
+      </div>
     </>
   );
 }

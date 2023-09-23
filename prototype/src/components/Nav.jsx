@@ -1,8 +1,9 @@
-import React from "react";
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
-import Logins from "./Logins";
+// Nav.jsx
+
+import React, { useState } from "react";
+import { Bars3Icon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
+import Logins from "./Logins";
 
 const navigation = [
   { name: "Start", to: "/" },
@@ -13,6 +14,19 @@ const navigation = [
 
 function Nav() {
   const [ButtonPopup, setButtonPopup] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+
+  const handleLogin = (username) => {
+    setUsername(username);
+    setIsLoggedIn(true);
+    setButtonPopup(false);
+  };
+
+  const handleLogout = () => {
+    setUsername("");
+    setIsLoggedIn(false);
+  };
 
   return (
     <div
@@ -31,7 +45,7 @@ function Nav() {
           <button
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 bg-black mr-4"
-            onClick={() => setMobileMenuOpen(true)}
+            onClick={() => setButtonPopup(true)}
           >
             <Bars3Icon className="h-6 w-6" aria-hidden="true" />
           </button>
@@ -48,15 +62,31 @@ function Nav() {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a
-            onClick={() => setButtonPopup(true)}
-            className="font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
-          >
-            Log in <span aria-hidden="true">&rarr;</span>
-          </a>
-          <Logins trigger={ButtonPopup} setTrigger={setButtonPopup}></Logins>
+          {isLoggedIn ? (
+            <div className="flex items-center">
+              <span className="mr-2">Welcome, {username}</span>
+              <button
+                onClick={handleLogout}
+                className="font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <a
+              onClick={() => setButtonPopup(true)}
+              className="font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
+            >
+              Log in <span aria-hidden="true">&rarr;</span>
+            </a>
+          )}
         </div>
       </nav>
+      <Logins
+        trigger={ButtonPopup}
+        setTrigger={setButtonPopup}
+        handleLogin={handleLogin}
+      />
     </div>
   );
 }

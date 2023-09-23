@@ -1,187 +1,83 @@
-import React from "react";
-import { useState } from "react";
-import { GoogleLogin } from "@react-oauth/google";
-import { auth, createAccount, logIntoExistingAccount } from "../firebase"
+// Logins.jsx
 
-function Logins(props) {
-  const [activeTab, setActiveTab] = useState("login");
+import React, { useState } from "react";
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
-  const responseMessage = (response) => {
-    console.log(response);
-  };
-  const errorMessage = (error) => {
-    console.log(error);
+function Logins({ trigger, setTrigger, handleLogin }) {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState(""); // Added state for email
+  const [password, setPassword] = useState("");
+
+  const handleClose = () => {
+    setTrigger(false);
   };
 
-  // Siobahn's additions for log in functionality
-  const localAuth = auth;
-  console.log("The localAuth value is ", localAuth);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [userPassword, setUserPassword] = useState("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add your login logic here (e.g., sending data to a server)
+    // Example:
+    handleLogin(username, email);
+  };
 
-  function handleNameChange(e) {
-    setName(e.target.value);
-  }
-
-  function handleEmailChange(e)  {
-    setEmail(e.target.value);
-  }
-
-  function handleUserPasswordChange(e)  {
-    setUserPassword(e.target.value);
-  }
-
-  function saveChanges(e) {
-    handleNameChange(e);
-    handleEmailChange(e);
-    handleUserPasswordChange(e)
-  }
-
-  return props.trigger ? (
-    <div className=" fixed top-0 left-0 w-full h-screen justify-center items-center flex">
-      <div className="backdrop-blur-lg rounded-xl relative p-8 w-full max-w-max border border-cyan-700">
+  return (
+    <div
+      className={`fixed inset-0 flex items-center justify-center ${
+        trigger ? "z-[51]" : "hidden"
+      }`}
+    >
+      <div className="p-4 rounded-lg shadow-lg backdrop-blur-lg">
+        <h2 className="text-xl font-bold mb-4 text-cyan-500">Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="username" className="block font-bold mb-2">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="border rounded w-full py-2 px-3 text-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-white font-bold mb-2">
+              Email
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="border rounded w-full py-2 px-3 text-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block font-bold mb-2 ">
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="border rounded w-full py-2 px-3 text-black "
+            />
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Login
+          </button>
+        </form>
         <button
-          onClick={() => props.setTrigger(false)}
-          className="absolute top-0 right-0 px-2 text-white border border-cyan-700 bg-cyan-900 rounded-tr-lg rounded-bl-lg"
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
+          onClick={handleClose}
         >
-          X
+          Close
         </button>
-
-        <div className="tab-content">
-          {activeTab === "login" && (
-            <div className="mb-2 mt-2">
-              <div className="mb-2">
-                <label for="email" className=" text-cyan-300">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  onChange={handleEmailChange}
-                  value={email}
-                  className=" text-white border bg-transparent border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
-                />
-                <i className="fa-solid fa-envelope text-cyan-300 absolute my-3 -mx-7"></i>
-              </div>
-
-              <div className="mb-4">
-                <label for="password" className="block text-cyan-300">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  onChange={handleUserPasswordChange}
-                  value={userPassword}
-                  className="border text-white bg-transparent border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
-                />
-                <i class="fa-solid fa-lock text-cyan-300 absolute my-3 -mx-7"></i>
-              </div>
-              <button
-                className={`w-full h-10 bg-cyan-600 rounded-md font-medium text-[1em] text-white mb-2
-                ${activeTab === "login" ? "focus:border-green-300" : ""}`}
-                onClick={logIntoExistingAccount(localAuth, email, userPassword)}
-              >
-                Login
-              </button>
-
-              <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
-              <button onClick={() => handleTabClick("register")}>
-                <div className="absolute text-white bottom-3 left-8">
-                  Don't have an account?
-                  <span className=" font-semibold"> Register</span>
-                </div>
-              </button>
-            </div>
-          )}
-
-          {activeTab === "register" && (
-            <div className="mb-3">
-              <div className="mb-2 mt-2">
-                <label for="name" className="block text-cyan-300">
-                  Name
-                </label>
-                <input
-                  id="name"
-                  type="text"
-                  onChange={handleNameChange}
-                  value={name}
-                  className="border text-white bg-transparent  border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
-                />
-                <i className="fa-solid fa-user text-cyan-300 absolute my-3 -mx-7"></i>
-              </div>
-
-              <div className="mb-2">
-                <label for="email" className="block text-cyan-300">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  onChange={handleEmailChange}
-                  value={email}
-                  className="border text-white bg-transparent border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
-                />
-                <i className="fa-solid fa-envelope text-cyan-300 absolute my-3 -mx-7"></i>
-              </div>
-
-              <div className="mb-4">
-                <label for="password" className="block text-cyan-300">
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  onChange={handleUserPasswordChange}
-                  value={userPassword}
-                  className="border text-white bg-transparent border-gray-400 px-4 py-2 w-full rounded-md focus:outline-none focus:border-blue-300"
-                />
-                <i class="fa-solid fa-lock text-cyan-300 absolute my-3 -mx-7"></i>
-              </div>
-
-              <div className="mb-4">
-                <label for="terms" className="flex items-center text-cyan-300">
-                  <input
-                    type="checkbox"
-                    name="flexCheck"
-                    id="terms"
-                    className="form-checkbox border   border-gray-400 rounded-md text-blue-300 focus:outline-none focus:border-blue-300"
-                  />
-                  <span className="ml-2">
-                    I have read and agree to the terms
-                  </span>
-                </label>
-              </div>
-              <button
-                className={`w-full h-10 bg-cyan-600 rounded-md font-medium text-[1em] text-white mb-2
-                ${activeTab === "login" ? "focus:border-green-300" : ""}`}
-                onClick={createAccount(localAuth, name, email, userPassword)}
-              >
-                Create Account
-              </button>
-
-              <GoogleLogin
-                onSuccess={responseMessage}
-                onError={errorMessage}
-                text="signup_with"
-              />
-              <button onClick={() => handleTabClick("login")}>
-                <div className="absolute text-white bottom-3 left-8">
-                  Already have a account?{" "}
-                  <span className=" font-semibold">Login</span>
-                </div>
-              </button>
-            </div>
-          )}
-        </div>
       </div>
     </div>
-  ) : (
-    ""
   );
 }
 
