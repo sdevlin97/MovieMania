@@ -23,6 +23,14 @@ function Nav() {
     setButtonPopup(false);
   };
 
+  const handleSignup = (username, email, password) => {
+    // Add your signup logic here
+    // ...
+
+    // Simulate a login after signup
+    handleLogin(username);
+  };
+
   const handleLogout = () => {
     setUsername("");
     setIsLoggedIn(false);
@@ -86,6 +94,7 @@ function Nav() {
         trigger={ButtonPopup}
         setTrigger={setButtonPopup}
         handleLogin={handleLogin}
+        handleSignup={handleSignup}
       />
     </div>
   );

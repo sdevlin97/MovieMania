@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 
-function Logins({ trigger, setTrigger, handleLogin }) {
+function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState(""); // Added state for email
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLogin, setIsLogin] = useState(true); // Added state to track login/signup mode
 
   const handleClose = () => {
     setTrigger(false);
@@ -13,9 +14,16 @@ function Logins({ trigger, setTrigger, handleLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your login logic here (e.g., sending data to a server)
-    // Example:
-    handleLogin(username, email);
+    if (isLogin) {
+      handleLogin(username, email, password);
+    } else {
+      // Add your signup logic here
+      handleSignup(username, email, password);
+    }
+  };
+
+  const toggleMode = () => {
+    setIsLogin(!isLogin);
   };
 
   return (
@@ -24,8 +32,10 @@ function Logins({ trigger, setTrigger, handleLogin }) {
         trigger ? "z-[51]" : "hidden"
       }`}
     >
-      <div className="p-4 rounded-lg shadow-lg backdrop-blur-lg">
-        <h2 className="text-xl font-bold mb-4 text-cyan-500">Login</h2>
+      <div className="p-4 rounded-lg shadow-lg backdrop-blur-lg border border-cyan-300">
+        <h2 className="text-xl font-bold mb-4 text-cyan-500">
+          {isLogin ? "Login" : "Signup"}
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="username" className="block font-bold mb-2">
@@ -67,9 +77,15 @@ function Logins({ trigger, setTrigger, handleLogin }) {
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
-            Login
+            {isLogin ? "Login" : "Signup"}
           </button>
         </form>
+        <button
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
+          onClick={toggleMode}
+        >
+          Switch to {isLogin ? "Signup" : "Login"}
+        </button>
         <button
           className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
           onClick={handleClose}
