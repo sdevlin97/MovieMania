@@ -38,7 +38,10 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="username" className="block font-bold mb-2">
+            <label
+              htmlFor="username"
+              className="block text-white font-bold mb-2"
+            >
               Username
             </label>
             <input
@@ -62,7 +65,10 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor="password" className="block font-bold mb-2 ">
+            <label
+              htmlFor="password"
+              className="block text-white font-bold mb-2 "
+            >
               Password
             </label>
             <input
@@ -75,22 +81,22 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
           </div>
           <button
             type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-cyan-500 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded"
           >
             {isLogin ? "Login" : "Signup"}
           </button>
         </form>
         <button
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
+          className=" text-white font-bold py-2 rounded mt-2 content-center"
           onClick={toggleMode}
         >
           Switch to {isLogin ? "Signup" : "Login"}
         </button>
         <button
-          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-2"
+          className="absolute top-0 right-0 px-2 text-white border border-cyan-700 bg-cyan-900 rounded-tr-lg rounded-bl-lg"
           onClick={handleClose}
         >
-          Close
+          X
         </button>
       </div>
     </div>

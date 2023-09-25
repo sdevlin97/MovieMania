@@ -1,7 +1,4 @@
-// Nav.jsx
-
 import React, { useState } from "react";
-import { Bars3Icon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import Logins from "./Logins";
 
@@ -13,9 +10,14 @@ const navigation = [
 ];
 
 function Nav() {
-  const [ButtonPopup, setButtonPopup] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
+  const [ButtonPopup, setButtonPopup] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   const handleLogin = (username) => {
     setUsername(username);
@@ -37,28 +39,22 @@ function Nav() {
   };
 
   return (
-    <div
-      className={`inset-0 ${
-        ButtonPopup ? "z-[50]" : "z-[0]"
-      } text-white bg-cyan-950`}
-    >
-      <nav className="flex items-center justify-between h-20 p-2 lg:px-4 ">
+    <div className="bg-cyan-950">
+      <nav className="container mx-auto p-2  h-20 flex justify-between items-center">
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
+          <a href="/" className="-m-1.5 p-1.5">
             <img className=" h-20 w-30" src="./logo-no-background.png" alt="" />
           </a>
         </div>
-        <div className="flex lg:hidden">
+        <div className="lg:hidden">
           <button
-            type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 bg-black mr-4"
-            onClick={() => setButtonPopup(true)}
+            onClick={toggleDropdown}
+            className="text-white hover:text-cyan-500 focus:outline-none"
           >
-            <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+            ☰
           </button>
         </div>
-        <div className="hidden lg:flex lg:gap-x-12">
+        <div className="hidden lg:flex space-x-8">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -72,7 +68,7 @@ function Nav() {
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           {isLoggedIn ? (
             <div className="flex items-center">
-              <span className="mr-2">Welcome, {username}</span>
+              <span className="mr-2 text-white">Welcome, {username}</span>
               <button
                 onClick={handleLogout}
                 className="font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
@@ -85,11 +81,27 @@ function Nav() {
               onClick={() => setButtonPopup(true)}
               className="font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
             >
-              Log in <span aria-hidden="true">&rarr;</span>
+              Log in
+              <span aria-hidden="true">&rarr;</span>
             </a>
           )}
         </div>
       </nav>
+      {isDropdownOpen && (
+        <div className="lg:hidden bg-cyan-950">
+          <div className="container mx-auto py-4 flex flex-col items-center space-y-4">
+            {navigation.map((item) => (
+              <Link
+                key={item.name}
+                to={item.to}
+                className="text-white hover:text-cyan-500"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
       <Logins
         trigger={ButtonPopup}
         setTrigger={setButtonPopup}
