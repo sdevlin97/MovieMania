@@ -3,7 +3,7 @@ import Tags from "./Tags";
 import SelectedTags from "./SelectedTags";
 import Card from "./Card";
 
-function Browse() {
+function Recommendations() {
   const containerStyle = {
     backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,
     backgroundSize: "cover",
@@ -40,4 +40,4 @@ function Browse() {
   );
 }
 
-export default Browse;
+export default Recommendations;

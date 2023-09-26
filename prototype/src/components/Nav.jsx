@@ -5,8 +5,7 @@ import Logins from "./Logins";
 const navigation = [
   { name: "Start", to: "/" },
   { name: "My List", to: "/MyList" },
-  { name: "Recommendations", to: "#" },
-  { name: "Browse", to: "/Browse" },
+  { name: "Recommendations", to: "/Recommendations" },
 ];
 
 function Nav() {
