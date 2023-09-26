@@ -1,8 +1,7 @@
-import { Parallax } from "react-parallax";
 import Tags from "./Tags";
 import SelectedTags from "./SelectedTags";
 import Card from "./Card";
-
+// SelectedTags is the same component has Tags, just to differ them here since they have diffrent hard coded data
 function Recommendations() {
   const containerStyle = {
     backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,

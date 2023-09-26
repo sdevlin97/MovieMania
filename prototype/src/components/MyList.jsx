@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Parallax } from "react-parallax";
 import MadeList from "./MadeList";
-import DevTag from "./DevTag"; // Updated import statement
+//DevTag is a diffrent way to get tags , you can remove it and use Tags component only or same in reverse
+import DevTag from "./DevTag";
 import Card from "./Card";
 
 const SavedList = [

@@ -1,7 +1,6 @@
 // File: Details.js
 
 import React, { useState } from "react";
-import { Parallax } from "react-parallax";
 
 const Details = () => {
   const [showTrailer, setShowTrailer] = useState(false);
