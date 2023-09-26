@@ -35,7 +35,7 @@ const Card = () => {
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
-        left: scrollContainerRef.current.scrollLeft - 500, 
+        left: scrollContainerRef.current.scrollLeft - 500,
         behavior: "smooth",
       });
     }
@@ -61,33 +61,33 @@ const Card = () => {
       >
         <div className="flex space-x-4 p-4 pr-16">
           {tags.map((movie, index) => (
-            <Link to="/details" key={index}>
-              <div className="p-4 rounded-lg shadow-md backdrop-blur-0 inline-block">
+            <div className="p-4 rounded-lg shadow-md backdrop-blur-0 inline-block">
+              <Link to="/details" key={index}>
                 <img
                   src={movie.poster}
                   alt={movie.title}
                   className="max-w-xs max-h-xs object-fill rounded-md mb-2"
                 />
-                <h2 className="text-lg font-semibold text-white text-center">
-                  {movie.title}
-                </h2>
-                <p className="text-gray-400 text-sm text-center">
-                  Rating: {movie.rating}
-                </p>
-                <div className="mt-2 mx-4 flex justify-center">
-                  <button
-                    className={`${
-                      selectedMovies.includes(movie)
-                        ? "bg-cyan-500 text-white"
-                        : "bg-gray-300 text-gray-600"
-                    } px-4 py-2 rounded-md transition-colors duration-300 hover:bg-cyan-600`}
-                    onClick={() => handleMovieSelect(movie)}
-                  >
-                    {selectedMovies.includes(movie) ? "Selected" : "Select"}
-                  </button>
-                </div>
+              </Link>
+              <h2 className="text-lg font-semibold text-white text-center">
+                {movie.title}
+              </h2>
+              <p className="text-gray-400 text-sm text-center">
+                Rating: {movie.rating}
+              </p>
+              <div className="mt-2 mx-4 flex justify-center">
+                <button
+                  className={`${
+                    selectedMovies.includes(movie)
+                      ? "bg-cyan-500 text-white"
+                      : "bg-gray-300 text-gray-600"
+                  } px-4 py-2 rounded-md transition-colors duration-300 hover:bg-cyan-600`}
+                  onClick={() => handleMovieSelect(movie)}
+                >
+                  {selectedMovies.includes(movie) ? "Selected" : "Select"}
+                </button>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
