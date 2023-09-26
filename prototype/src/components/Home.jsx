@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { useState } from "react";
 import Aboutus from "./Aboutus";
 import $ from "jquery";
@@ -36,7 +35,7 @@ async function testDatabaseRequest() {
   }
 }
 
-function Partone() {
+function Home() {
   const [ButtonPopup, setButtonPopup] = useState(false);
 
   const containerStyle = {
@@ -61,4 +60,4 @@ function Partone() {
   );
 }
 
-export default Partone;
+export default Home;
