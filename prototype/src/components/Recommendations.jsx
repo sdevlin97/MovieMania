@@ -12,7 +12,7 @@ function Recommendations() {
 
   return (
     <>
-      <div style={containerStyle} className="relative h-screen bg-black">
+      <div style={containerStyle} className="relative bg-black">
         <div className="text-white flex items-center h-20 p-2 lg:px-4 bg-black ">
           Tags:
           <Tags></Tags>
@@ -24,7 +24,7 @@ function Recommendations() {
         <div className="backdrop-blur ">
           <Card></Card>
         </div>
-        <div className="flex flex-col items-center justify-center mt-4">
+        <div className="flex flex-col items-center justify-center pt-4 pb-20 backdrop-blur">
           <input
             type="text"
             placeholder="Enter a name for the list"

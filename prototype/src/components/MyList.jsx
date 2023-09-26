@@ -174,7 +174,7 @@ const MyList = () => {
 
   return (
     <>
-      <div style={containerStyle} className="relative h-screen bg-black">
+      <div style={containerStyle} className="relative bg-black">
         <div className="flex justify-center items-center text-lg text-black h-20 bg-black">
           <h1 className="font-bold text-[60px]">Saved List</h1>
         </div>
