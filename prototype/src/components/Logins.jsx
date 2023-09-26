@@ -1,5 +1,3 @@
-// Logins.jsx
-
 import React, { useState } from "react";
 
 function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {

@@ -1,5 +1,3 @@
-// File: Details.js
-
 import React, { useState } from "react";
 
 const Details = () => {

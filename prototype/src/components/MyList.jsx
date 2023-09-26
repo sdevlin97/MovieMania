@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Parallax } from "react-parallax";
 import MadeList from "./MadeList";
 //DevTag is a diffrent way to get tags , you can remove it and use Tags component only or same in reverse
 import DevTag from "./DevTag";
@@ -165,14 +164,17 @@ const MyList = () => {
     setSelectedTags(tags);
   };
 
+  const containerStyle = {
+    backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundAttachment: "fixed",
+    minHeight: "100vh",
+  };
+
   return (
     <>
-      <Parallax
-        bgImage="./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg"
-        strength={800}
-        className="relative bg-black"
-        style={{ minHeight: "100vh" }}
-      >
+      <div style={containerStyle} className="relative h-screen bg-black">
         <div className="flex justify-center items-center text-lg text-black h-20 bg-black">
           <h1 className="font-bold text-[60px]">Saved List</h1>
         </div>
@@ -196,7 +198,7 @@ const MyList = () => {
         <div className="backdrop-blur ">
           <Card></Card>
         </div>
-      </Parallax>
+      </div>
     </>
   );
 };

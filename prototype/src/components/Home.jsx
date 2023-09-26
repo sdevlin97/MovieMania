@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import Aboutus from "./Aboutus";
 import $ from "jquery";
 import { db } from "../firebase";
@@ -36,8 +36,6 @@ async function testDatabaseRequest() {
 }
 
 function Home() {
-  const [ButtonPopup, setButtonPopup] = useState(false);
-
   const containerStyle = {
     backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,
     backgroundSize: "cover",
