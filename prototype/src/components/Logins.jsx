@@ -1,12 +1,16 @@
 // Logins.jsx
 
 import React, { useState } from "react";
+import Alert from "./Alert";
+import { createAccount, logIntoExistingAccount, logout, auth } from "../firebase.js"
 
 function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(true); // Added state to track login/signup mode
+  const [isLogin, setIsLogin] = useState(true); // Added state to track login/signup mode\
+
+  let isUserLoggedIn = false;
 
   const handleClose = () => {
     setTrigger(false);
@@ -16,14 +20,20 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
     e.preventDefault();
     if (isLogin) {
       handleLogin(username, email, password);
+      logIntoExistingAccount(auth, username, email, password);
+      isUserLoggedIn = true;
     } else {
       // Add your signup logic here
       handleSignup(username, email, password);
+      createAccount(auth, username, email, password);
     }
   };
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
+    if (isUserLoggedIn == true) {
+      logout();
+    }
   };
 
   return (
