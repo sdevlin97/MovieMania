@@ -8,6 +8,18 @@ const tags = [
   { title: "Deadpool 2 ", rating: "9.3", poster: "./deadpool.jpg" },
   { title: "Spider-Man: No Way Home", rating: "9.5", poster: "./spider.jpg" },
   { title: "Thor Ragnarok", rating: "7.5", poster: "./thor.jpg" },
+  { title: "The Dark Knight", rating: "8.5", poster: "./batmanfull.jpg" },
+  { title: "Superman Returns", rating: "5.5", poster: "./supermanfull.jpg" },
+  { title: "Green Lantern", rating: "1.0", poster: "./greenlantern.jpg" },
+  { title: "Deadpool 2 ", rating: "9.3", poster: "./deadpool.jpg" },
+  { title: "Spider-Man: No Way Home", rating: "9.5", poster: "./spider.jpg" },
+  { title: "Thor Ragnarok", rating: "7.5", poster: "./thor.jpg" },
+  { title: "The Dark Knight", rating: "8.5", poster: "./batmanfull.jpg" },
+  { title: "Superman Returns", rating: "5.5", poster: "./supermanfull.jpg" },
+  { title: "Green Lantern", rating: "1.0", poster: "./greenlantern.jpg" },
+  { title: "Deadpool 2 ", rating: "9.3", poster: "./deadpool.jpg" },
+  { title: "Spider-Man: No Way Home", rating: "9.5", poster: "./spider.jpg" },
+  { title: "Thor Ragnarok", rating: "7.5", poster: "./thor.jpg" },
 ];
 
 const Card = () => {

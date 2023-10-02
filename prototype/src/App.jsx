@@ -5,6 +5,7 @@ import Home from "./components/Home";
 import Recommendations from "./components/Recommendations";
 import MyList from "./components/MyList";
 import Details from "./components/Details";
+import Browse from "./components/Browse";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             <Route path="/Recommendations" element={<Recommendations />} />
             <Route path="/MyList" element={<MyList />} />
             <Route path="/details" element={<Details />} />
+            <Route path="/Browse" element={<Browse />} />
           </Routes>
         </div>
       </Router>

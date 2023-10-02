@@ -6,6 +6,7 @@ const navigation = [
   { name: "Start", to: "/" },
   { name: "My List", to: "/MyList" },
   { name: "Recommendations", to: "/Recommendations" },
+  { name: "Browse", to: "/Browse" },
 ];
 
 function Nav() {
