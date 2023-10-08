@@ -12,6 +12,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors")({ origin: true });
 const app = express();
 app.use(bodyParser.json());
+const fetch = require('node-fetch');
 
 app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -24,6 +25,25 @@ app.use((req, res, next) => {
 app.post("/test", async (req, res) => {
     functions.logger.info("A request has been made");
     res.send("Hello from Firebase functions!")
+});
+
+app.get("/movieTest", async (req, res) => {
+
+    const url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization: 'Bearer ' + process.env.API_KEY
+      }
+    };
+
+fetch(url, options)
+    .then(res => res.json())
+    .then(json => res.status(200).send(json))
+    .catch((err) => {
+        functions.logger.error('error:' + err);
+    });
 });
 
 // app.post("/processMovieData", async (req, res) => {

@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import { testMovieBackendCall } from "../BackendCalls";
 
 const tags = [
   { title: "The Dark Knight", rating: "8.5", poster: "./batmanfull.jpg" },
@@ -94,7 +95,7 @@ const Card = () => {
                       ? "bg-cyan-500 text-white"
                       : "bg-gray-300 text-gray-600"
                   } px-4 py-2 rounded-md transition-colors duration-300 hover:bg-cyan-600`}
-                  onClick={() => handleMovieSelect(movie)}
+                  onClick={() => testMovieBackendCall()}
                 >
                   {selectedMovies.includes(movie) ? "Selected" : "Select"}
                 </button>

@@ -1,39 +1,7 @@
 import React from "react";
 import Aboutus from "./Aboutus";
-import $ from "jquery";
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
-
-function testBackendCall() {
-  $.ajax({
-    url: `https://us-central1-moviemania-ba604.cloudfunctions.net/app/test`,
-    crossOrigin: true,
-    type: "POST",
-    async: true,
-    success: function (response) {
-      console.log("We've made a sucessful post request!");
-      console.log("The response is: ", response);
-    },
-    error: function (error) {
-      console.log("Something went wrong with our test");
-      console.log("The error is: ");
-      console.log(error);
-    },
-  });
-}
-
-async function testDatabaseRequest() {
-  try {
-    const docRef = await addDoc(collection(db, "movies"), {
-      title: "Blade Runner",
-      release_date: "06/25/1982",
-      rating: 8.1,
-    });
-    console.log("Document written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding document: ", e);
-  }
-}
 
 function Home() {
   const containerStyle = {
