@@ -17,6 +17,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+export var userIsLoggedIn = false;
 
 // if we're going to use callbacks we have to make sure the nested functions have them in their parameter list as well
 
@@ -29,6 +30,7 @@ export function createAccount(auth, username, email, password) {
     // add user to Firestore database
     addNewUserToDatabase(db, user, username)
     alert("Success creating account in! Welcome, " + user.displayName);
+    userIsLoggedIn = true;
   })
   .catch((error) => {
     // error signing in 
@@ -46,6 +48,7 @@ export function logIntoExistingAccount(auth, email, password) {
     const user = userCredential.user;
     console.log("The user signed in successfully! The user is: ", user.email);
     alert("Welcome, " + user.displayName);
+    userIsLoggedIn = true;
   })
   .catch((error) => {
     const errorCode = error.code;
@@ -72,6 +75,7 @@ async function addNewUserToDatabase(db, user, username) {
 export function logout() {
   signOut(auth).then(() => {
     alert("Sign out successful");
+    userIsLoggedIn = false;
   }).catch((error) => {
     alert("Error signing out: ", error);
   });

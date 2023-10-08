@@ -10,8 +10,6 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
   const [password, setPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true); // Added state to track login/signup mode\
 
-  let isUserLoggedIn = false;
-
   const handleClose = () => {
     setTrigger(false);
   };
@@ -19,9 +17,8 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isLogin) {
-      handleLogin(username, email, password);
-      logIntoExistingAccount(auth, username, email, password);
-      isUserLoggedIn = true;
+      handleLogin(email, password);
+      logIntoExistingAccount(auth, email, password);
     } else {
       // Add your signup logic here
       handleSignup(username, email, password);
@@ -31,9 +28,6 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
 
   const toggleMode = () => {
     setIsLogin(!isLogin);
-    if (isUserLoggedIn == true) {
-      logout();
-    }
   };
 
   return (

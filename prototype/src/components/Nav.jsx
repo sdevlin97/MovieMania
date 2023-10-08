@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Bars3Icon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import Logins from "./Logins";
+import {logout, auth} from "../firebase.js"
 
 const navigation = [
   { name: "Start", to: "/" },
@@ -34,6 +35,7 @@ function Nav() {
   const handleLogout = () => {
     setUsername("");
     setIsLoggedIn(false);
+    logout()
   };
 
   return (
