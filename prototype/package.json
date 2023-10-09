@@ -19,6 +19,7 @@
     "@react-oauth/google": "^0.11.1",
     "firebase": "^10.4.0",
     "heroicons": "^2.0.18",
+    "node-fetch": "^2.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-parallax": "^3.5.1",

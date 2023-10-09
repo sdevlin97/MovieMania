@@ -1,7 +1,7 @@
 // Logins.jsx
 
 import React, { useState } from "react";
-import Alert from "./Alert";
+import { Slide, ToastContainer, toast } from 'react-toastify';
 import { createAccount, logIntoExistingAccount, logout, auth } from "../firebase.js"
 
 function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {

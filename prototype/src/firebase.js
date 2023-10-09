@@ -2,6 +2,8 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { Slide, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAJDp8nZCV3A-T5IeC7_qG91k9jPEGrdFU",
@@ -18,6 +20,7 @@ const analytics = getAnalytics(app);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 export var userIsLoggedIn = false;
+const toastId = 'Log in Status';
 
 // if we're going to use callbacks we have to make sure the nested functions have them in their parameter list as well
 
@@ -29,7 +32,16 @@ export function createAccount(auth, username, email, password) {
     console.log("User account creation successful! The user is: ", user.email);
     // add user to Firestore database
     addNewUserToDatabase(db, user, username)
-    alert("Success creating account in! Welcome, " + user.displayName);
+    toast.success("Success creating account!", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 3000, //3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      toastId,
+      transition: Slide
+    });
     userIsLoggedIn = true;
   })
   .catch((error) => {
@@ -37,7 +49,10 @@ export function createAccount(auth, username, email, password) {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log("Error creating account: ", errorCode, errorMessage);
-    alert("Error creating account. Please try again");
+    toast.error('Error creating account. Please try again.', {
+      position: toast.POSITION.TOP_CENTER,
+      toastId
+    });
   });
 }
 
@@ -47,14 +62,26 @@ export function logIntoExistingAccount(auth, email, password) {
     // Signed in 
     const user = userCredential.user;
     console.log("The user signed in successfully! The user is: ", user.email);
-    alert("Welcome, " + user.displayName);
+    toast.success("Success logging in!", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 3000, //3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      toastId,
+      transition: Slide
+    });
     userIsLoggedIn = true;
   })
   .catch((error) => {
     const errorCode = error.code;
     const errorMessage = error.message;
     console.log("Error signing into account. The error is: ", errorCode, errorMessage);
-    alert("Error creating logging into account. Please try again");
+    toast.error('Error logging in. Please try again.', {
+      position: toast.POSITION.TOP_CENTER,
+      toastId
+    });
   });
 }
 
@@ -74,9 +101,22 @@ async function addNewUserToDatabase(db, user, username) {
 
 export function logout() {
   signOut(auth).then(() => {
-    alert("Sign out successful");
+    toast.success("Sign out successful!", {
+      position: toast.POSITION.TOP_CENTER,
+      autoClose: 3000, //3 seconds
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      toastId,
+      transition: Slide
+    });
     userIsLoggedIn = false;
   }).catch((error) => {
-    alert("Error signing out: ", error);
+    toast.error('Error signing out.', {
+      position: toast.POSITION.TOP_CENTER,
+      toastId
+    });
+    console.log("Error signing out: ", error);
   });
 }
