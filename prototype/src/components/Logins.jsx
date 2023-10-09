@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { createAccount, logIntoExistingAccount, auth } from "../firebase.js"
 
 function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(true); // Added state to track login/signup mode
+  const [isLogin, setIsLogin] = useState(true); // Added state to track login/signup mode\
 
   const handleClose = () => {
     setTrigger(false);
@@ -13,10 +14,12 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (isLogin) {
-      handleLogin(username, email, password);
+      handleLogin(email, password);
+      logIntoExistingAccount(auth, email, password);
     } else {
       // Add your signup logic here
       handleSignup(username, email, password);
+      createAccount(auth, username, email, password);
     }
   };
 
