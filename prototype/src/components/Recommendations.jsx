@@ -8,6 +8,7 @@ function Recommendations() {
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundAttachment: "fixed",
+    minHeight: "100vh",
   };
 
   return (
