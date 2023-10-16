@@ -1,39 +1,29 @@
 import $ from "jquery";
 
-export async function testBackendCall() {
+  let movieDataList = [];
+
+  export function getPopularMovies() {
     $.ajax({
-      url: `https://us-central1-moviemania-ba604.cloudfunctions.net/app/test`,
+      url: `https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies`,
       crossOrigin: true,
-      type: "POST",
+      type: "GET",
       async: true,
       success: function (response) {
-        console.log("We've made a sucessful post request!");
-        console.log("The response is: ", response);
+        processMovieData(response);
+        return movieDataList;
       },
       error: function (error) {
-        console.log("Something went wrong with our test");
-        console.log("The error is: ");
         console.log(error);
       },
     });
   }
 
-  export async function testMovieBackendCall() {
-    $.ajax({
-      url: `https://us-central1-moviemania-ba604.cloudfunctions.net/app/movieTest`,
-      crossOrigin: true,
-      type: "GET",
-      async: true,
-      success: function (response) {
-        console.log("We've made a sucessful get request!");
-        console.log("The response is: ", response);
-      },
-      error: function (error) {
-        console.log("Something went wrong with our test");
-        console.log("The error is: ");
-        console.log(error);
-      },
-    });
+  function processMovieData(movieList) {
+
+    for (let movie of movieList.results) {
+      movieDataList.push(movie); 
+    }
+    return movieDataList;
   }
   
 

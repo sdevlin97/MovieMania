@@ -27,72 +27,28 @@ app.post("/test", async (req, res) => {
     res.send("Hello from Firebase functions!")
 });
 
-app.get("/movieTest", async (req, res) => {
+app.get("/popularMovies", async (req, res) => {
+  let moviesList = [];
 
-    const url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
-    const options = {
-      method: 'GET',
-      headers: {
-        accept: 'application/json',
-        Authorization: 'Bearer ' + process.env.API_KEY
-      }
-    };
+  const url =
+    "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1";
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: "Bearer " + process.env.API_KEY,
+    },
+  };
 
-fetch(url, options)
-    .then(res => res.json())
-    .then(json => res.status(200).send(json))
+  fetch(url, options)
+    .then((response) => {
+        let data = response.json()
+        return data;
+    })
+    .then((json) => res.status(200).send(json))
     .catch((err) => {
-        functions.logger.error('error:' + err);
+      functions.logger.error("error:" + err);
     });
 });
-
-// app.post("/processMovieData", async (req, res) => {
-//     try {
-//         let moviesList = [];
-//         // Get the list of movies
-//         let movieResponse = await axios({
-//             url: 'https://moviesdatabase.p.rapidapi.com/titles',
-//             method: "POST",
-//             headers: {
-//                 "X-RapidAPI-Key": "1e582ff4f5msha23ff115a1807a1p105fffjsn14c35c5efc71",
-//                 "X-RapidAPI-Host": "moviesdatabase.p.rapidapi.com"
-//             },
-//             data: "limit 20; info base_info;"
-//         })
-//             .then((response) => {
-//                 moviesList = response.data;
-//                 functions.logger.log("In the backend, in processMovieData, we have retrieved the movie data: ", moviesList);
-//                 let convertedMoviesList = [];
-//                 // process the movies data into an object that only has the data we need
-//                 for (let i = 0; i < response.data.length; i++) {
-//                     const convertedMovie = {
-//                         titleText: response.data[i].titleText,
-//                         aggregateRating: response.data[i].ratingsSummary.aggregateRating,
-//                         voteCount: response.data[i].ratingsSummary.voteCount,
-//                         primaryImage: response.data[i].primaryImage.url,
-//                         genres: [generateGenreList(response.data[i].genres.genres)]
-//                     };
-//                     convertedMoviesList.push(convertedMovie);
-//                 }
-//                 res.status(200).send(convertedMoviesList);
-//             })
-//             .catch((err) => {
-//                 functions.logger.error("Error looping through movies on the backend:", err);
-//                 res.status(404).send(err);
-//             });
-//     } catch (error) {
-//         res.status(400).send(error);
-//     }
-// });
-
-// function generateGenreList(genres) {
-//     if (genres != null) {
-//         functions.logger.debug("the genres array is equal to: ", genres);
-//         return genres;
-//     } else {
-//         functions.logger.debug("the genres array is empty");
-//         return -1;
-//     }
-// }
 
 exports.app = functions.https.onRequest(app);
