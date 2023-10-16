@@ -22,7 +22,6 @@ const Card = () => {
         }
         const result = await response.json();
         setData(result);
-        console.log("The data is: ", data);
         setLoading(false);
       } catch (error) {
         setError(error);
