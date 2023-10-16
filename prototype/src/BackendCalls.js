@@ -1,7 +1,5 @@
 import $ from "jquery";
 
-  let movieDataList = [];
-
   export function getPopularMovies() {
     $.ajax({
       url: `https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies`,
@@ -17,16 +15,7 @@ import $ from "jquery";
       },
     });
   }
-
-  function processMovieData(movieList) {
-
-    for (let movie of movieList.results) {
-      movieDataList.push(movie); 
-    }
-    return movieDataList;
-  }
   
-
   // Keeping this in case I need to add more database functionality
 
   /*
