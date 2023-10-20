@@ -1,35 +1,53 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
 
 const Details = () => {
+  const { id } = useParams();
+  const [data, setData] = useState(null); // Initialize the state with null or an initial value
+  const [loading, setLoading] = useState(true); // Optionally, you can track loading state
+  const [error, setError] = useState(null); // Optionally, track any errors
   const [showTrailer, setShowTrailer] = useState(false);
 
-  const tags = [
-    {
-      title: "The Dark Knight",
-      rating: "8.5",
-      poster: "./batmanfull.jpg",
-      description: "The plot follows the vigilante Batman",
-      tags: [
-        "Mind-Bending",
-        "Epic Romance",
-        "Sci-Fi Action",
-        "Quentin Tarantino",
-        "Time Travel",
-        "Thriller",
-        "Alternate Reality",
-        "Existential",
-        "Dystopian",
-        "Cyberpunk",
-        "Art House",
-        "Surreal",
-      ],
-    },
-  ];
+  // API Call to get details for a given movie
+  function createGenreString(data) {
+    const names = data.map((item) => item.name);
+    return names.join(", ");
+  }
+
+  useEffect(() => {
+    // Gets Movie Details
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `https://us-central1-moviemania-ba604.cloudfunctions.net/app/movieDetails/${id}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        console.log("The movie details we got is: ", result);
+        setData(result);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [id]);
 
   return (
-    <div className="flex flex-wrap justify-center bg-black">
-      {tags.map((movie, index) => (
-        <div key={index} className="p-4 backdrop-blur-md rounded-lg mx-2 my-4 ">
+    <div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error.message}</p>
+      ) : data ? (
+        <div className="flex flex-wrap justify-center bg-black">
+        <div className="p-4 backdrop-blur-md rounded-lg mx-2 my-4 ">
           {showTrailer ? (
             <div>
               <video
@@ -47,8 +65,8 @@ const Details = () => {
           ) : (
             <div>
               <img
-                src={movie.poster}
-                alt={movie.title}
+                src={"https://image.tmdb.org/t/p/original/" + data.poster_path }
+                alt={data.title}
                 className="mx-auto w-full rounded-md mb-2"
                 style={{
                   height: "auto",
@@ -65,22 +83,26 @@ const Details = () => {
               </button>
             </div>
           )}
-          <h2 className="text-lg font-semibold text-white text-center">
-            {movie.title}
+          <h2 className="text-lg font-semibold text-white text-center"> 
+            {data.title}
           </h2>
           <p className="text-gray-400 text-sm text-center">
-            Rating: {movie.rating}
+            Rating: {data.vote_average}
           </p>
           <div className="text-white text-center mb-2">
-            Description: {movie.description}
+            Description: {data.overview}
           </div>
-          <p className="text-white text-center">
-            Tags: {movie.tags.join(", ")}
-          </p>
+          <p className="text-white text-center">Tags: {createGenreString(data.genres)}</p>
         </div>
-      ))}
+      </div>
+      ) : null}
     </div>
   );
+};
+
+
+Details.propTypes = {
+  id: PropTypes.string.isRequired,
 };
 
 export default Details;

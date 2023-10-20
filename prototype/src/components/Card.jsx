@@ -17,6 +17,7 @@ const Card = () => {
         const response = await fetch(
           `https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies`
         );
+        
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -86,7 +87,7 @@ const Card = () => {
             <div className="flex space-x-4 p-4 pr-16">
               {data.results.map((movie, index) => (
                 <div className="p-4 rounded-lg shadow-md backdrop-blur-0 inline-block">
-                  <Link to="/details" key={index}>
+                  <Link to={`/details/${movie.id}`}>
                     <img
                       src={
                         "https://image.tmdb.org/t/p/original/" + movie.poster_path
