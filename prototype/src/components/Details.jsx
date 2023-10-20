@@ -25,7 +25,12 @@ const Details = () => {
       {tags.map((movie, index) => (
         <div
           key={index}
-          className="flex backdrop-blur-md rounded-lg mx-2 my-4 w-full max-w-6xl p-4"
+          className="flex rounded-lg mx-2 my-4 w-full max-w-6xl p-4"
+          style={{
+            backgroundImage: `url(${movie.backdrop})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+          }}
         >
           {showTrailer ? (
             <div className="w-1/2"></div>
