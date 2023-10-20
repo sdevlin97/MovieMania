@@ -5,31 +5,25 @@ const Details = () => {
 
   const tags = [
     {
-      title: "The Dark Knight",
-      rating: "8.5",
+      title: "Mission: Impossible - Dead Reckoning Part One",
+      rating: "77%",
       poster: "./batmanfull.jpg",
-      description: "The plot follows the vigilante Batman",
-      tags: [
-        "Mind-Bending",
-        "Epic Romance",
-        "Sci-Fi Action",
-        "Quentin Tarantino",
-        "Time Travel",
-        "Thriller",
-        "Alternate Reality",
-        "Existential",
-        "Dystopian",
-        "Cyberpunk",
-        "Art House",
-        "Surreal",
-      ],
+      backdrop: "./backdrop.jpg",
+      dateReleased: "07/12/2023",
+      genres: ["Action", "Thriller"],
+      runtime: "2h 44m",
+      quotation: "We all share the same fate.",
+      description:
+        "Ethan Hunt and his IMF team embark on their most dangerous mission yet: To track down a terrifying new weapon that threatens all of humanity before it falls into the wrong hands. With control of the future and the world's fate at stake and dark forces from Ethan's past closing in, a deadly race around the globe begins. Confronted by a mysterious, all-powerful enemy, Ethan must consider that nothing can matter more than his mission—not even the lives of those he cares about most.",
+      director: "Christopher McQuarrie",
+      writer: "Erik Jendresen",
     },
   ];
 
   return (
-    <div className="flex flex-wrap justify-center bg-black">
+    <div className="flex flex-wrap justify-center ">
       {tags.map((movie, index) => (
-        <div key={index} className="p-4 backdrop-blur-md rounded-lg mx-2 my-4 ">
+        <div key={index} className="p-4 backdrop-blur-md rounded-lg mx-2 my-4">
           {showTrailer ? (
             <div>
               <video
@@ -61,7 +55,7 @@ const Details = () => {
                 onClick={() => setShowTrailer(true)}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 mx-auto block"
               >
-                Watch Trailer
+                Play Trailer
               </button>
             </div>
           )}
@@ -69,13 +63,17 @@ const Details = () => {
             {movie.title}
           </h2>
           <p className="text-gray-400 text-sm text-center">
-            Rating: {movie.rating}
+            {movie.dateReleased} • {movie.genres.join(", ")} • {movie.runtime}
           </p>
-          <div className="text-white text-center mb-2">
-            Description: {movie.description}
-          </div>
-          <p className="text-white text-center">
-            Tags: {movie.tags.join(", ")}
+          <p className="text-white text-center italic mb-2">
+            "{movie.quotation}"
+          </p>
+          <div className="text-white text-center mb-2">{movie.description}</div>
+          <p className="text-gray-400 text-sm text-center">
+            Director: {movie.director}
+          </p>
+          <p className="text-gray-400 text-sm text-center">
+            Writer: {movie.writer}
           </p>
         </div>
       ))}
