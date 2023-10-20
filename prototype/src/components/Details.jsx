@@ -21,60 +21,56 @@ const Details = () => {
   ];
 
   return (
-    <div className="flex flex-wrap justify-center ">
+    <div className="flex justify-center items-center h-full py-4">
       {tags.map((movie, index) => (
-        <div key={index} className="p-4 backdrop-blur-md rounded-lg mx-2 my-4">
+        <div
+          key={index}
+          className="flex backdrop-blur-md rounded-lg mx-2 my-4 w-full max-w-6xl p-4"
+        >
           {showTrailer ? (
-            <div>
+            <div className="w-1/2">
               <video
                 src="batmantrailer.mp4"
                 controls
-                className="mx-auto w-full rounded-md mb-2"
+                className="w-full h-full rounded-l-md"
               />
               <button
                 onClick={() => setShowTrailer(false)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 mx-auto block"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 block"
               >
                 Go Back to Image
               </button>
             </div>
           ) : (
-            <div>
+            <div className="w-[20%]">
               <img
                 src={movie.poster}
                 alt={movie.title}
-                className="mx-auto w-full rounded-md mb-2"
-                style={{
-                  height: "auto",
-                  maxHeight: "50%",
-                  width: "auto",
-                  maxWidth: "50%",
-                }}
+                className="w-[100%] h-[80%] rounded-l-md"
               />
               <button
                 onClick={() => setShowTrailer(true)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 mx-auto block"
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 block"
               >
                 Play Trailer
               </button>
             </div>
           )}
-          <h2 className="text-lg font-semibold text-white text-center">
-            {movie.title}
-          </h2>
-          <p className="text-gray-400 text-sm text-center">
-            {movie.dateReleased} • {movie.genres.join(", ")} • {movie.runtime}
-          </p>
-          <p className="text-white text-center italic mb-2">
-            "{movie.quotation}"
-          </p>
-          <div className="text-white text-center mb-2">{movie.description}</div>
-          <p className="text-gray-400 text-sm text-center">
-            Director: {movie.director}
-          </p>
-          <p className="text-gray-400 text-sm text-center">
-            Writer: {movie.writer}
-          </p>
+
+          <div className="w-[100%] p-4">
+            <h2 className="text-lg font-semibold text-white mb-2">
+              {movie.title}
+            </h2>
+            <p className="text-gray-400 text-sm mb-4">
+              {movie.dateReleased} • {movie.genres.join(", ")} • {movie.runtime}
+            </p>
+            <p className="text-white mb-4 italic">"{movie.quotation}"</p>
+            <div className="text-white mb-4">{movie.description}</div>
+            <p className="text-gray-400 text-sm mb-2">
+              Director: {movie.director}
+            </p>
+            <p className="text-gray-400 text-sm">Writer: {movie.writer}</p>
+          </div>
         </div>
       ))}
     </div>
