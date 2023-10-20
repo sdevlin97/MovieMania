@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import Modal from "./Modal";
+import Card from "./Card.jsx";
 
 const Details = () => {
   const { id } = useParams();
@@ -100,6 +101,10 @@ const Details = () => {
               </div>
             </div>
           </div>
+          <h1 className="tracking-[.50em] mt-2 font-bold text-center text-[30px] text-white">
+            Similar Movies
+          </h1>
+          <Card></Card>
           <Modal isOpen={showTrailer} toggleModal={() => setShowTrailer(false)}>
             <iframe
               width="100%"
