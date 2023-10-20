@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 
 const Details = () => {
-  const { id } = useParams();
+  const {id} = useParams();
   const [data, setData] = useState(null); // Initialize the state with null or an initial value
   const [loading, setLoading] = useState(true); // Optionally, you can track loading state
   const [error, setError] = useState(null); // Optionally, track any errors

@@ -1,7 +1,5 @@
 import React from "react";
 import Aboutus from "./Aboutus";
-import { db } from "../firebase";
-import { collection, addDoc } from "firebase/firestore";
 
 function Home() {
   const containerStyle = {
