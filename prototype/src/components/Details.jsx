@@ -28,53 +28,36 @@ const Details = () => {
           className="flex backdrop-blur-md rounded-lg mx-2 my-4 w-full max-w-6xl p-4"
         >
           {showTrailer ? (
-            <div className="w-1/2">
-              <video
-                src="batmantrailer.mp4"
-                controls
-                className="w-full h-full rounded-l-md"
-              />
-              <button
-                onClick={() => setShowTrailer(false)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 block"
-              >
-                Go Back to Image
-              </button>
-            </div>
+            <div className="w-1/2"></div>
           ) : (
-            <div className="w-[20%]">
+            <div className="w-[30%] ">
               <img
                 src={movie.poster}
                 alt={movie.title}
-                className="w-[100%] h-[80%] rounded-l-md"
+                className="w-[100%] h-[100%] rounded-l-md"
               />
-              <button
-                onClick={() => setShowTrailer(true)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 block"
-              >
-                Play Trailer
-              </button>
             </div>
           )}
 
           <div className="w-[100%] p-4">
-            <h2 className="text-lg font-semibold text-white mb-2">
+            <h2 className="text-xl font-semibold text-white mb-2">
               {movie.title}
             </h2>
-            <p className="text-gray-400 text-sm mb-4">
+            <p className="text-gray-400 text-base mb-4">
               {movie.dateReleased} • {movie.genres.join(", ")} • {movie.runtime}
             </p>
-            <p className="text-white mb-4 italic">"{movie.quotation}"</p>
-            <div className="text-white mb-4">{movie.description}</div>
-            <p className="text-gray-400 text-sm mb-2">
+            <p className="text-white mb-4 italic text-lg">
+              "{movie.quotation}"
+            </p>
+            <div className="text-white text-lg mb-4">{movie.description}</div>
+            <p className="text-gray-400 text-base mb-2">
               Director: {movie.director}
             </p>
-            <p className="text-gray-400 text-sm">Writer: {movie.writer}</p>
+            <p className="text-gray-400 text-base">Writer: {movie.writer}</p>
           </div>
         </div>
       ))}
     </div>
   );
 };
-
 export default Details;
