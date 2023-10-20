@@ -26,7 +26,7 @@ const Details = () => {
         <div
           className="flex justify-center items-center h-full py-4"
           style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${movie.backdrop})`,
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${movie.backdrop})`,
 
             backgroundSize: "cover",
             backgroundPosition: "center center",
