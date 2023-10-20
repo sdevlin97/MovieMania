@@ -1,74 +1,123 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+import { useParams } from "react-router-dom";
+import Modal from "./Modal";
 
 const Details = () => {
+  const { id } = useParams();
+  const [data, setData] = useState(null); // Initialize the state with null or an initial value
+  const [loading, setLoading] = useState(true); // Optionally, you can track loading state
+  const [error, setError] = useState(null); // Optionally, track any errors
   const [showTrailer, setShowTrailer] = useState(false);
 
-  const tags = [
-    {
-      title: "Mission: Impossible - Dead Reckoning Part One",
-      rating: "77%",
-      poster: "./batmanfull.jpg",
-      backdrop: "./backdrop.jpg",
-      dateReleased: "07/12/2023",
-      genres: ["Action", "Thriller"],
-      runtime: "2h 44m",
-      quotation: "We all share the same fate.",
-      description:
-        "Ethan Hunt and his IMF team embark on their most dangerous mission yet: To track down a terrifying new weapon that threatens all of humanity before it falls into the wrong hands. With control of the future and the world's fate at stake and dark forces from Ethan's past closing in, a deadly race around the globe begins. Confronted by a mysterious, all-powerful enemy, Ethan must consider that nothing can matter more than his mission—not even the lives of those he cares about most.",
-      director: "Christopher McQuarrie",
-      writer: "Erik Jendresen",
-    },
-  ];
+  // API Call to get details for a given movie
+  function createGenreString(data) {
+    const names = data.map((item) => item.name);
+    return names.join(", ");
+  }
+
+  useEffect(() => {
+    // Gets Movie Details
+    async function fetchData() {
+      try {
+        const response = await fetch(
+          `https://us-central1-moviemania-ba604.cloudfunctions.net/app/movieDetails/${id}`
+        );
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        console.log("The movie details we got is: ", result);
+        setData(result);
+        setLoading(false);
+      } catch (error) {
+        setError(error);
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [id]);
 
   return (
-    <>
-      {tags.map((movie, index) => (
-        <div
-          className="flex justify-center items-center h-full py-4"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)), url(${movie.backdrop})`,
-
-            backgroundSize: "cover",
-            backgroundPosition: "center center",
-          }}
-        >
+    <div>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Error: {error.message}</p>
+      ) : data ? (
+        <>
           <div
-            key={index}
-            className="flex rounded-lg mx-2 my-4 w-full max-w-6xl p-4 "
+            className="flex justify-center items-center h-full py-4"
+            style={{
+              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center center",
+            }}
           >
-            {showTrailer ? (
-              <div className="w-1/2"></div>
-            ) : (
-              <div className="w-[30%] ">
+            <div className="flex rounded-lg mx-2 my-4 w-full max-w-6xl p-4 ">
+              <div className="w-[30%]">
                 <img
-                  src={movie.poster}
-                  alt={movie.title}
+                  src={
+                    "https://image.tmdb.org/t/p/original/" + data.poster_path
+                  }
+                  alt={data.title}
                   className="w-[100%] h-[100%] rounded-l-md"
                 />
               </div>
-            )}
+              <div className="w-[100%] p-4">
+                <h2 className="text-xl font-semibold text-white mb-2">
+                  {data.title}
+                </h2>
+                <p className="text-gray-400 text-base mb-4">
+                  {data.release_date} • {createGenreString(data.genres)} •{" "}
+                  {data.runtime} min
+                </p>
 
-            <div className="w-[100%] p-4">
-              <h2 className="text-xl font-semibold text-white mb-2">
-                {movie.title}
-              </h2>
-              <p className="text-gray-400 text-base mb-4">
-                {movie.dateReleased} • {movie.genres.join(", ")} •{" "}
-                {movie.runtime}
-              </p>
-              <p className="text-gray-100 mb-4 italic text-lg">
-                "{movie.quotation}"
-              </p>
-              <div className="text-white text-lg mb-4">{movie.description}</div>
-              <p className="text-white text-base mb-2">
-                Director: {movie.director}
-              </p>
-              <p className="text-white text-base">Writer: {movie.writer}</p>
+                <p className="text-gray-100 mb-4 italic text-lg">
+                  "{data.tagline}"
+                </p>
+
+                <div className="text-white text-lg mb-4">{data.overview}</div>
+                <p className="text-[1.5rem] text-white">
+                  {data.vote_average}{" "}
+                  <span className="text-[1rem] ml-[0.1rem] text-white">
+                    {" "}
+                    /10
+                  </span>
+                </p>
+
+                <button
+                  className="text-white "
+                  onClick={() => setShowTrailer(true)}
+                >
+                  <i class="fa-solid fa-play mr-2 mt-4"></i> Watch Trailer
+                </button>
+                <button className="ml-20 text-white">
+                  <i class="fa-solid fa-plus"></i> Watchlist
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      ))}
-    </>
+          <Modal isOpen={showTrailer} toggleModal={() => setShowTrailer(false)}>
+            <iframe
+              width="100%"
+              height="100%"
+              src={`https://www.youtube.com/embed/2m1drlOZSDw`}
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </Modal>
+        </>
+      ) : null}
+    </div>
   );
 };
+
+Details.propTypes = {
+  id: PropTypes.string.isRequired,
+};
+
 export default Details;

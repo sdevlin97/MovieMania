@@ -1,7 +1,12 @@
-import React from "react";
+import { Link } from "react-router-dom";
+import { useState } from "react";
 import Aboutus from "./Aboutus";
+import $ from "jquery";
+import { ToastContainer } from 'react-toastify';
 
-function Home() {
+function Partone() {
+  const [ButtonPopup, setButtonPopup] = useState(false);
+
   const containerStyle = {
     backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,
     backgroundSize: "cover",
@@ -12,8 +17,9 @@ function Home() {
   return (
     <>
       <div style={containerStyle} className="relative h-screen bg-black">
+      <div className="toast-container"><ToastContainer limit={2}/></div>
         <div className="flex items-center justify-center absolute h-2/4 mt-20  w-full  -my-[100px]">
-          <h1 className="flex tracking-[.20em] font-bold text-center font-serif text-cyan-500 sm:text-[50px] md:text-[100px] lg:text-[100px] ">
+          <h1 className="flex text-[100px] tracking-[.20em] font-bold text-center font-serif text-cyan-500 ">
             Movie Mania
           </h1>
         </div>
@@ -24,4 +30,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Partone;
