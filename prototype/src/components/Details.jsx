@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
-import Modal from "./Modal"; // Assuming Modal.jsx is in the same directory
+import Modal from "./Modal";
 
 const Details = () => {
   const { id } = useParams();
