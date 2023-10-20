@@ -46,60 +46,47 @@ const Details = () => {
       ) : error ? (
         <p>Error: {error.message}</p>
       ) : data ? (
-        <div className="flex flex-wrap justify-center bg-black">
-        <div className="p-4 backdrop-blur-md rounded-lg mx-2 my-4 ">
-          {showTrailer ? (
-            <div>
-              <video
-                src="batmantrailer.mp4"
-                controls
-                className="mx-auto w-full rounded-md mb-2"
-              />
-              <button
-                onClick={() => setShowTrailer(false)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 mx-auto block"
-              >
-                Go Back to Image
-              </button>
-            </div>
-          ) : (
-            <div>
+        <div
+          className="flex justify-center items-center h-full py-4"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center center",
+          }}
+        >
+          <div className="flex rounded-lg mx-2 my-4 w-full max-w-6xl p-4 ">
+            <div className="w-[30%]">
               <img
                 src={"https://image.tmdb.org/t/p/original/" + data.poster_path }
                 alt={data.title}
-                className="mx-auto w-full rounded-md mb-2"
-                style={{
-                  height: "auto",
-                  maxHeight: "50%",
-                  width: "auto",
-                  maxWidth: "50%",
-                }}
+                className="w-[100%] h-[100%] rounded-l-md"
               />
-              <button
-                onClick={() => setShowTrailer(true)}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4 mx-auto block"
-              >
-                Watch Trailer
-              </button>
             </div>
-          )}
-          <h2 className="text-lg font-semibold text-white text-center"> 
-            {data.title}
-          </h2>
-          <p className="text-gray-400 text-sm text-center">
-            Rating: {data.vote_average}
-          </p>
-          <div className="text-white text-center mb-2">
-            Description: {data.overview}
+            <div className="w-[100%] p-4">
+              <h2 className="text-xl font-semibold text-white mb-2">
+                {data.title}
+              </h2>
+              <p className="text-gray-400 text-base mb-4">
+                {data.release_date} • {createGenreString(data.genres)} •{" "}
+                {data.runtime} min
+              </p>
+
+              <p className="text-gray-100 mb-4 italic text-lg">
+                "{data.tagline}"
+              </p>
+
+              <div className="text-white text-lg mb-4">{data.overview}</div>
+              <p className="text-[1.5rem] text-white">
+                {data.vote_average}{" "}
+                <span className="text-[1rem] ml-[0.1rem] text-white"> /10</span>
+              </p>
+            </div>
           </div>
-          <p className="text-white text-center">Tags: {createGenreString(data.genres)}</p>
         </div>
-      </div>
       ) : null}
     </div>
   );
 };
-
 
 Details.propTypes = {
   id: PropTypes.string.isRequired,
