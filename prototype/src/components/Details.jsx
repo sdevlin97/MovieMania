@@ -94,6 +94,9 @@ const Details = () => {
                 >
                   <i class="fa-solid fa-play mr-2 mt-4"></i> Watch Trailer
                 </button>
+                <button className="ml-20 text-white">
+                  <i class="fa-solid fa-plus"></i> Watchlist
+                </button>
               </div>
             </div>
           </div>

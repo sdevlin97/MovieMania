@@ -17,7 +17,7 @@ const Card = () => {
         const response = await fetch(
           `https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies`
         );
-        
+
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
@@ -102,18 +102,7 @@ const Card = () => {
                   <p className="text-gray-400 text-sm text-center">
                     Rating: {movie.vote_average}
                   </p>
-                  <div className="mt-2 mx-4 flex justify-center">
-                    <button
-                      className={`${
-                        selectedMovies.includes(movie)
-                          ? "bg-cyan-500 text-white"
-                          : "bg-gray-300 text-gray-600"
-                      } px-4 py-2 rounded-md transition-colors duration-300 hover:bg-cyan-600`}
-                      onClick={() => handleMovieSelect(movie)}
-                    >
-                      {selectedMovies.includes(movie) ? "Selected" : "Select"}
-                    </button>
-                  </div>
+                  <div className="mt-2 mx-4 flex justify-center"></div>
                 </div>
               ))}
             </div>
