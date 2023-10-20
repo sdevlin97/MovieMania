@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
+import Modal from "./Modal"; // Assuming Modal.jsx is in the same directory
 
 const Details = () => {
   const { id } = useParams();
@@ -46,43 +47,67 @@ const Details = () => {
       ) : error ? (
         <p>Error: {error.message}</p>
       ) : data ? (
-        <div
-          className="flex justify-center items-center h-full py-4"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center center",
-          }}
-        >
-          <div className="flex rounded-lg mx-2 my-4 w-full max-w-6xl p-4 ">
-            <div className="w-[30%]">
-              <img
-                src={"https://image.tmdb.org/t/p/original/" + data.poster_path}
-                alt={data.title}
-                className="w-[100%] h-[100%] rounded-l-md"
-              />
-            </div>
-            <div className="w-[100%] p-4">
-              <h2 className="text-xl font-semibold text-white mb-2">
-                {data.title}
-              </h2>
-              <p className="text-gray-400 text-base mb-4">
-                {data.release_date} • {createGenreString(data.genres)} •{" "}
-                {data.runtime} min
-              </p>
+        <>
+          <div
+            className="flex justify-center items-center h-full py-4"
+            style={{
+              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://image.tmdb.org/t/p/original/${data.backdrop_path})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center center",
+            }}
+          >
+            <div className="flex rounded-lg mx-2 my-4 w-full max-w-6xl p-4 ">
+              <div className="w-[30%]">
+                <img
+                  src={
+                    "https://image.tmdb.org/t/p/original/" + data.poster_path
+                  }
+                  alt={data.title}
+                  className="w-[100%] h-[100%] rounded-l-md"
+                />
+              </div>
+              <div className="w-[100%] p-4">
+                <h2 className="text-xl font-semibold text-white mb-2">
+                  {data.title}
+                </h2>
+                <p className="text-gray-400 text-base mb-4">
+                  {data.release_date} • {createGenreString(data.genres)} •{" "}
+                  {data.runtime} min
+                </p>
 
-              <p className="text-gray-100 mb-4 italic text-lg">
-                "{data.tagline}"
-              </p>
+                <p className="text-gray-100 mb-4 italic text-lg">
+                  "{data.tagline}"
+                </p>
 
-              <div className="text-white text-lg mb-4">{data.overview}</div>
-              <p className="text-[1.5rem] text-white">
-                {data.vote_average}{" "}
-                <span className="text-[1rem] ml-[0.1rem] text-white"> /10</span>
-              </p>
+                <div className="text-white text-lg mb-4">{data.overview}</div>
+                <p className="text-[1.5rem] text-white">
+                  {data.vote_average}{" "}
+                  <span className="text-[1rem] ml-[0.1rem] text-white">
+                    {" "}
+                    /10
+                  </span>
+                </p>
+
+                <button
+                  className="text-white "
+                  onClick={() => setShowTrailer(true)}
+                >
+                  <i class="fa-solid fa-play mr-2 mt-4"></i> Watch Trailer
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+          <Modal isOpen={showTrailer} toggleModal={() => setShowTrailer(false)}>
+            <iframe
+              width="100%"
+              height="100%"
+              src={`https://www.youtube.com/embed/2m1drlOZSDw`}
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            ></iframe>
+          </Modal>
+        </>
       ) : null}
     </div>
   );
