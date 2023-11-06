@@ -1,25 +1,26 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const MovieTitles = [
   {
     title: "Inception",
-    tmdbId: 27205,
+    id: 27205,
   },
   {
     title: "The Matrix",
-    tmdbId: 603,
+    id: 603,
   },
   {
     title: "Interstellar",
-    tmdbId: 157336,
+    id: 157336,
   },
   {
-    title: "The Dark Knight",
-    tmdbId: 155,
+    title: "Five Nights At Freddys",
+    id: 507089,
   },
   {
     title: "Pulp Fiction",
-    tmdbId: 680,
+    id: 680,
   },
 ];
 
@@ -45,8 +46,8 @@ const WatchList = () => {
     <div style={containerStyle} className="relative h-screen">
       <ul>
         {movies.map((movie) => (
-          <li key={movie.tmdbId} className="mb-4">
-            {movie.title}
+          <li key={movie.id} className="mb-4">
+            <Link to={`/details/${movie.id}`}> {movie.title}</Link>
             <button
               onClick={() => removeMovie(movie.tmdbId)}
               className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
