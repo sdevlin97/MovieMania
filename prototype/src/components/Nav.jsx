@@ -58,36 +58,8 @@ function Nav() {
           </button>
         </div>
         <div className="hidden lg:flex space-x-8">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              to={item.to}
-              className=" font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
-            >
-              {item.name}
-            </Link>
-          ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          {isLoggedIn ? (
-            <div className="flex items-center">
-              <span className="mr-2 text-white">Welcome, {username}</span>
-              <button
-                onClick={handleLogout}
-                className="font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
-              >
-                Logout
-              </button>
-            </div>
-          ) : (
-            <a
-              onClick={() => setButtonPopup(true)}
-              className="font-bold leading-6 text-white hover:text-cyan-500 text-lg hover:transition ease-in-out duration-300 hover:-translate-y-1"
-            >
-              Log in
-              <span aria-hidden="true">&rarr;</span>
-            </a>
-          )}
         </div>
       </nav>
       {isDropdownOpen && (
@@ -102,6 +74,25 @@ function Nav() {
                 {item.name}
               </Link>
             ))}
+            {isLoggedIn ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-white">Welcome, {username}</span>
+                <button
+                  onClick={handleLogout}
+                  className="text-white hover:text-cyan-500"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <a
+                onClick={() => setButtonPopup(true)}
+                className="text-white hover:text-cyan-500"
+              >
+                Log in
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            )}
           </div>
         </div>
       )}
