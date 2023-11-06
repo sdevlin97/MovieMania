@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Logins from "./Logins";
-import {logout, auth} from "../firebase.js"
+import { logout, auth } from "../firebase.js";
 
 const navigation = [
   { name: "Start", to: "/" },
   { name: "My Lists", to: "/MyList" },
   { name: "Recommendations", to: "/Recommendations" },
   { name: "Browse", to: "/Browse" },
+  { name: "Watchlist", to: "/Watchlist" },
 ];
 
 function Nav() {
@@ -37,7 +38,7 @@ function Nav() {
   const handleLogout = () => {
     setUsername("");
     setIsLoggedIn(false);
-    logout()
+    logout();
   };
 
   return (
