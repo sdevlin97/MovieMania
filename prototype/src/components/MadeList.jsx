@@ -10,7 +10,7 @@ const MadeList = ({ savedName, nametags, onRemove, onSelect }) => {
   };
 
   return (
-    <div className="ml-[10px] hidden lg:flex lg:gap-x-12 overflow-x-auto py-[14px]">
+    <div className="ml-[10px]  lg:flex lg:gap-x-12 overflow-x-auto py-[14px]">
       <div className="flex flex-col items-start">
         <div className="flex space-x-4">
           <div className="text-white bg-black" style={{ whiteSpace: "nowrap" }}>

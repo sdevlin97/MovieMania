@@ -34,7 +34,7 @@ const tags = [
 
 const SelectedTags = () => {
   return (
-    <div className="ml-[10px] hidden lg:flex lg:gap-x-12 overflow-x-auto py-[14px]">
+    <div className="ml-[10px]  lg:flex lg:gap-x-12 overflow-x-auto py-[14px]">
       <div className="flex space-x-4">
         {tags.map((item) => (
           <a

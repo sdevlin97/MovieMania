@@ -2,7 +2,7 @@ import React from "react";
 
 const DevTag = ({ selectedTags }) => {
   return (
-    <div className="ml-[10px] hidden lg:flex lg:gap-x-12 overflow-x-auto py-[14px]">
+    <div className="ml-[10px] lg:flex lg:gap-x-12 overflow-x-auto py-[14px]">
       <div className="flex space-x-4">
         {selectedTags.map((tag, index) => (
           <div
