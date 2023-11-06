@@ -45,7 +45,7 @@ const Card = () => {
   const scrollRight = () => {
     if (scrollContainerRef.current) {
       scrollContainerRef.current.scrollTo({
-        left: scrollContainerRef.current.scrollLeft + 500,
+        left: scrollContainerRef.current.scrollLeft + 500, // Adjust the scroll distance as needed
         behavior: "smooth",
       });
     }
@@ -86,7 +86,7 @@ const Card = () => {
           >
             <div className="flex space-x-4 p-4 pr-16">
               {data.results.map((movie, index) => (
-                <div className="flex flex-col items-center p-4 rounded-lg shadow-md backdrop-blur-0 inline-block">
+                <div className="p-4 rounded-lg shadow-md backdrop-blur-0 inline-block">
                   <Link to={`/details/${movie.id}`}>
                     <img
                       src={
@@ -102,6 +102,7 @@ const Card = () => {
                   <p className="text-gray-400 text-sm text-center">
                     Rating: {movie.vote_average}
                   </p>
+                  <div className="mt-2 mx-4 flex justify-center"></div>
                 </div>
               ))}
             </div>
