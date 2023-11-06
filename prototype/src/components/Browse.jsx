@@ -15,19 +15,19 @@ function Browse() {
           <h1 className="tracking-[.50em] font-bold text-center text-[30px] text-white">
             Trending
           </h1>
-          <Card></Card>
+          <Card category="popular" />
         </div>
         <div className="backdrop-blur ">
           <h1 className="tracking-[.50em] font-bold text-center text-[30px] text-white">
             Top Rated
           </h1>
-          <Card></Card>
+          <Card category="topRated" />
         </div>
         <div className="backdrop-blur ">
           <h1 className="tracking-[.50em] font-bold text-center text-[30px] text-white">
             New Releases
           </h1>
-          <Card></Card>
+          <Card category="newReleases" />
         </div>
       </div>
     </>

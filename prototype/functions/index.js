@@ -50,6 +50,50 @@ app.get("/popularMovies", async (req, res) => {
     });
 });
 
+app.get("/top_rated", async (req, res) => {
+  const url =
+    "https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1";
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: "Bearer " + process.env.API_KEY,
+    },
+  };
+
+  fetch(url, options)
+    .then((response) => {
+      let data = response.json();
+      return data;
+    })
+    .then((json) => res.status(200).send(json))
+    .catch((err) => {
+      functions.logger.error("error:" + err);
+    });
+});
+
+app.get("/upcoming", async (req, res) => {
+  const url =
+    "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1";
+  const options = {
+    method: "GET",
+    headers: {
+      accept: "application/json",
+      Authorization: "Bearer " + process.env.API_KEY,
+    },
+  };
+
+  fetch(url, options)
+    .then((response) => {
+      let data = response.json();
+      return data;
+    })
+    .then((json) => res.status(200).send(json))
+    .catch((err) => {
+      functions.logger.error("error:" + err);
+    });
+});
+
 app.get("/movieDetails/:id", async (req, res) => {
   const id = req.params.id;
   const url = `https://api.themoviedb.org/3/movie/${id}?language=en-US`;

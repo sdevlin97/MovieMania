@@ -2,21 +2,27 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-const Card = () => {
-  const [data, setData] = useState(null); // Initialize the state with null or an initial value
-  const [loading, setLoading] = useState(true); // Optionally, you can track loading state
-  const [error, setError] = useState(null); // Optionally, track any errors
-
-  const [selectedMovies, setSelectedMovies] = useState([]);
+const Card = ({ category }) => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    // Gets Popular Movies
+    // Fetch data based on the category prop
     async function fetchData() {
+      let apiUrl;
+
+      if (category === "popular") {
+        apiUrl = "https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies";
+      } else if (category === "topRated") {
+        apiUrl = "https://us-central1-moviemania-ba604.cloudfunctions.net/app/top_rated";
+      } else if (category === "newReleases") {
+        apiUrl = "https://us-central1-moviemania-ba604.cloudfunctions.net/app/upcoming";
+      }
+
       try {
-        const response = await fetch(
-          `https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies`
-        );
+        const response = await fetch(apiUrl);
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -31,7 +37,7 @@ const Card = () => {
     }
 
     fetchData();
-  }, []);
+  }, [category]);
 
   const handleMovieSelect = (movie) => {
     // Toggle the selected state of the movie
