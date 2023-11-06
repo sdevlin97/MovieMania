@@ -1,7 +1,7 @@
 import Tags from "./Tags";
 import SelectedTags from "./SelectedTags";
 import Card from "./Card";
-// SelectedTags is the same component has Tags, just to differ them here since they have diffrent hard coded data
+// SelectedTags is the same component as Tags, just to differ them here since they have diffrent hard coded data
 function Recommendations() {
   const containerStyle = {
     backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,
@@ -23,7 +23,7 @@ function Recommendations() {
           <SelectedTags></SelectedTags>
         </div>
         <div className="backdrop-blur ">
-          <Card></Card>
+        <Card category="popular" /> {/* Display "Trending" movies by default */}
         </div>
         <div className="flex flex-col items-center justify-center pt-4 pb-20 backdrop-blur">
           <input
