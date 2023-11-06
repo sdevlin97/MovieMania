@@ -28,9 +28,6 @@ function Nav() {
   };
 
   const handleSignup = (username, email, password) => {
-    // Add your signup logic here
-    // ...
-
     // Simulate a login after signup
     handleLogin(username);
   };
@@ -97,11 +94,30 @@ function Nav() {
               <Link
                 key={item.name}
                 to={item.to}
-                className="text-white hover:text-cyan-500"
+                className="font-bold leading-6 text-white hover:text-cyan-500 text-lg "
               >
                 {item.name}
               </Link>
             ))}
+            {isLoggedIn ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-white">Welcome, {username}</span>
+                <button
+                  onClick={handleLogout}
+                  className="text-white hover:text-cyan-500"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <a
+                onClick={() => setButtonPopup(true)}
+                className="font-bold leading-6 text-white hover:text-cyan-500 text-lg "
+              >
+                Log in
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            )}
           </div>
         </div>
       )}
@@ -116,3 +132,4 @@ function Nav() {
 }
 
 export default Nav;
+``;
