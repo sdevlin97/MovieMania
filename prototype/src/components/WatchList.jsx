@@ -38,19 +38,19 @@ const WatchList = () => {
   };
 
   // Function to remove a movie from the list it works for now - kevin
-  const removeMovie = (tmdbId) => {
-    setMovies(movies.filter((movie) => movie.tmdbId !== tmdbId));
+  const removeMovie = (id) => {
+    setMovies(movies.filter((movie) => movie.id !== id));
   };
 
   return (
     <div style={containerStyle} className="relative h-screen">
       <ul>
         {movies.map((movie) => (
-          <li key={movie.id} className="mb-4">
+          <li key={movie.id} className="mb-4 ">
             <Link to={`/details/${movie.id}`}> {movie.title}</Link>
             <button
-              onClick={() => removeMovie(movie.tmdbId)}
-              className="ml-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              onClick={() => removeMovie(movie.id)}
+              className="ml-4 bg-red-200 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
             >
               Remove
             </button>
