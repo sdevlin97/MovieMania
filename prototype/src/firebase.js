@@ -24,11 +24,43 @@ const toastId = 'Log in Status';
 
 // if we're going to use callbacks we have to make sure the nested functions have them in their parameter list as well
 
+    // Login State Check
+export function checkLoginState() {
+      if (auth.currentUser != null) {
+          // User is logged, awesome. do nothing
+          console.log("The user is logged in");
+          return true;
+      } else {
+          // No user is signed in. Deactivate buttons and alert that they need to login
+          return false;
+      }
+  }
+
+  /*
+   createUserWithEmailAndPassword(auth, email, password)
+    .then(async (userCredential) => {
+      // Signed in
+      const user = auth.currentUser;
+      let id = String(user.uid);
+      localStorage.setItem('email', email);
+      
+      let loginAnchor = document.querySelector(".login-name__anchor");
+      loginAnchor.innerHTML = email;
+
+      await setDoc(doc(db, "users", id), {
+        email: email,
+        wishlist: "false",
+        backlog: "false"
+      });
+
+      */
+
 export function createAccount(auth, username, email, password) {
   createUserWithEmailAndPassword(auth, email, password)
   .then(async (userCredential) => {
     // account creation success; user is now logged in
     const user = userCredential.user;
+    let id = String(user.uid);
     console.log("User account creation successful! The user is: ", user.email);
     // add user to Firestore database
     addNewUserToDatabase(db, user, username)
@@ -85,15 +117,32 @@ export function logIntoExistingAccount(auth, email, password) {
   });
 }
 
+/*
+await setDoc(doc(db, "users", id), {
+        email: email,
+        wishlist: "false",
+        backlog: "false"
+      });
+*/
+
 // firestore helper functions
 async function addNewUserToDatabase(db, user, username) {
   try {
-    const docRef = await addDoc(collection(db, "users"), {
+    // const docRef = await addDoc(collection(db, "users"), {
+    //   username: username,
+    //   email: user.email,
+    //   tagList: [], 
+    //   watchList: [],
+    // });
+
+    await setDoc(doc(db, "users", String(user.uid)), {
       username: username,
       email: user.email,
-      tagList: ["No tags yet"]
+      watchList: [],
+      tagList: []
     });
-    console.log("Document written with ID: ", docRef.id);
+    console.log("Document has been written")
+    // console.log("Document written with ID: ", docRef.id);
   } catch (e) {
     console.error("Error adding document: ", e);
   }

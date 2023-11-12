@@ -3,6 +3,8 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import Modal from "./Modal";
 import Card from "./Card.jsx";
+import { auth, checkLoginState, db } from "../firebase.js"
+import { getFirestore, collection, addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 
 const Details = () => {
   const { id } = useParams();
@@ -15,6 +17,39 @@ const Details = () => {
   function createGenreString(data) {
     const names = data.map((item) => item.name);
     return names.join(", ");
+  }
+
+  async function addToWatchlist(id, title) {
+    let boolCheck = checkLoginState()
+    console.log("The checked login state is: ", boolCheck);
+    if (boolCheck) {
+        //add wishlist firebase code here
+        let movieId = id;
+        const user = auth.currentUser;
+        let userID = String(user.uid);
+        
+        console.log("The movie ID is: ", movieId);
+        console.log("The movie title is: ", title);
+        // Creates the custom wishlist and adds data in the database
+        const userRef = doc(db, "users", userID);
+        const watchlistColRef = collection(userRef, "watchList");
+        const watchlistDocRef = doc(watchlistColRef, title);
+        setDoc(watchlistDocRef, {
+            movie_title: title,
+            movie_id: movieId
+        });
+
+        // Add field to user document keeping track of what list collections we have
+        // created in the database to be referenced in the settings.js
+
+        await updateDoc(doc(db, "users", userID), {wishlist: "true"});
+
+        alert(`${title} has been added to your Watchlist`);
+
+    } else {
+        // don't add logic to buttons
+        alert("You must be logged in to add to your Watchlist.")
+    }
   }
 
   useEffect(() => {
@@ -95,7 +130,7 @@ const Details = () => {
                 >
                   <i class="fa-solid fa-play mr-2 mt-4"></i> Watch Trailer
                 </button>
-                <button className="ml-20 text-white">
+                <button className="ml-20 text-white"  onClick={() => addToWatchlist(data.id, data.title)}>
                   <i class="fa-solid fa-plus"></i> Watchlist
                 </button>
               </div>
