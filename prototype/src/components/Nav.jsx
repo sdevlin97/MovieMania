@@ -5,9 +5,9 @@ import { logout, auth } from "../firebase.js";
 
 const navigation = [
   { name: "Start", to: "/" },
-  { name: "My Lists", to: "/MyList" },
   { name: "Recommendations", to: "/Recommendations" },
   { name: "Browse", to: "/Browse" },
+  { name: "My Lists", to: "/MyList" },
   { name: "Watchlist", to: "/Watchlist" },
 ];
 
