@@ -1,5 +1,7 @@
 import { useState } from "react";
 import Nav from "./components/Nav";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Recommendations from "./components/Recommendations";
@@ -24,6 +26,7 @@ function App() {
           </Routes>
         </div>
       </Router>
+      <ToastContainer />
     </>
   );
 }

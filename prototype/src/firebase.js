@@ -65,7 +65,7 @@ export function createAccount(auth, username, email, password) {
     // add user to Firestore database
     addNewUserToDatabase(db, user, username)
     toast.success("Success creating account!", {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_LEFT,
       autoClose: 3000, //3 seconds
       hideProgressBar: false,
       closeOnClick: true,
@@ -82,7 +82,7 @@ export function createAccount(auth, username, email, password) {
     const errorMessage = error.message;
     console.log("Error creating account: ", errorCode, errorMessage);
     toast.error('Error creating account. Please try again.', {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_LEFT,
       toastId
     });
   });
@@ -95,7 +95,7 @@ export function logIntoExistingAccount(auth, email, password) {
     const user = userCredential.user;
     console.log("The user signed in successfully! The user is: ", user.email);
     toast.success("Success logging in!", {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_LEFT,
       autoClose: 3000, //3 seconds
       hideProgressBar: false,
       closeOnClick: true,
@@ -111,30 +111,15 @@ export function logIntoExistingAccount(auth, email, password) {
     const errorMessage = error.message;
     console.log("Error signing into account. The error is: ", errorCode, errorMessage);
     toast.error('Error logging in. Please try again.', {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_LEFT,
       toastId
     });
   });
 }
 
-/*
-await setDoc(doc(db, "users", id), {
-        email: email,
-        wishlist: "false",
-        backlog: "false"
-      });
-*/
-
 // firestore helper functions
 async function addNewUserToDatabase(db, user, username) {
   try {
-    // const docRef = await addDoc(collection(db, "users"), {
-    //   username: username,
-    //   email: user.email,
-    //   tagList: [], 
-    //   watchList: [],
-    // });
-
     await setDoc(doc(db, "users", String(user.uid)), {
       username: username,
       email: user.email,
@@ -142,16 +127,16 @@ async function addNewUserToDatabase(db, user, username) {
       tagList: []
     });
     console.log("Document has been written")
-    // console.log("Document written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding document: ", e);
+    console.log("Document written with ID: ", user.uid);
+  } catch (error) {
+    console.error("Error adding document: ", error);
   }
 }
 
 export function logout() {
   signOut(auth).then(() => {
     toast.success("Sign out successful!", {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_LEFT,
       autoClose: 3000, //3 seconds
       hideProgressBar: false,
       closeOnClick: true,
@@ -163,7 +148,7 @@ export function logout() {
     userIsLoggedIn = false;
   }).catch((error) => {
     toast.error('Error signing out.', {
-      position: toast.POSITION.TOP_CENTER,
+      position: toast.POSITION.TOP_LEFT,
       toastId
     });
     console.log("Error signing out: ", error);
