@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Logins from "./Logins";
-import {logout, auth} from "../firebase.js"
+import { logout, auth } from "../firebase.js";
 
 const navigation = [
   { name: "Start", to: "/" },
-  { name: "My List", to: "/MyList" },
   { name: "Recommendations", to: "/Recommendations" },
   { name: "Browse", to: "/Browse" },
+  { name: "My Lists", to: "/MyList" },
+  { name: "Watchlist", to: "/Watchlist" },
 ];
 
 function Nav() {
@@ -27,9 +28,6 @@ function Nav() {
   };
 
   const handleSignup = (username, email, password) => {
-    // Add your signup logic here
-    // ...
-
     // Simulate a login after signup
     handleLogin(username);
   };
@@ -37,7 +35,7 @@ function Nav() {
   const handleLogout = () => {
     setUsername("");
     setIsLoggedIn(false);
-    logout()
+    logout();
   };
 
   return (
@@ -96,11 +94,30 @@ function Nav() {
               <Link
                 key={item.name}
                 to={item.to}
-                className="text-white hover:text-cyan-500"
+                className="font-bold leading-6 text-white hover:text-cyan-500 text-lg "
               >
                 {item.name}
               </Link>
             ))}
+            {isLoggedIn ? (
+              <div className="flex items-center space-x-4">
+                <span className="text-white">Welcome, {username}</span>
+                <button
+                  onClick={handleLogout}
+                  className="text-white hover:text-cyan-500"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <a
+                onClick={() => setButtonPopup(true)}
+                className="font-bold leading-6 text-white hover:text-cyan-500 text-lg "
+              >
+                Log in
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            )}
           </div>
         </div>
       )}
@@ -115,3 +132,4 @@ function Nav() {
 }
 
 export default Nav;
+``;

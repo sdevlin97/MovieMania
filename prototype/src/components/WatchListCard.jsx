@@ -1,32 +1,24 @@
-/* eslint-disable react/jsx-key */
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-const Card = ({ category }) => {
+const WatchListCard = () => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedMovies, setSelectedMovies] = useState([]);
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    // Fetch data based on the category prop
     async function fetchData() {
-      let apiUrl;
-
-      if (category === "popular") {
-        apiUrl = "https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies";
-      } else if (category === "topRated") {
-        apiUrl = "https://us-central1-moviemania-ba604.cloudfunctions.net/app/top_rated";
-      } else if (category === "newReleases") {
-        apiUrl = "https://us-central1-moviemania-ba604.cloudfunctions.net/app/upcoming";
-      }
-
       try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(
+          "https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies"
+        );
 
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+
         const result = await response.json();
         setData(result);
         setLoading(false);
@@ -37,10 +29,9 @@ const Card = ({ category }) => {
     }
 
     fetchData();
-  }, [category]);
+  }, []);
 
   const handleMovieSelect = (movie) => {
-    // Toggle the selected state of the movie
     if (selectedMovies.includes(movie)) {
       setSelectedMovies(selectedMovies.filter((m) => m !== movie));
     } else {
@@ -91,8 +82,11 @@ const Card = ({ category }) => {
             ref={scrollContainerRef}
           >
             <div className="flex space-x-4 p-4 pr-16">
-              {data.results.map((movie, index) => (
-                <div className="flex flex-col items-center p-4 rounded-lg shadow-md backdrop-blur-0 inline-block">
+              {data.results.map((movie) => (
+                <div
+                  key={movie.id}
+                  className="flex flex-col items-center p-4 rounded-lg shadow-md backdrop-blur-0 inline-block"
+                >
                   <Link to={`/details/${movie.id}`}>
                     <img
                       src={
@@ -109,6 +103,9 @@ const Card = ({ category }) => {
                   <p className="text-gray-400 text-sm text-center">
                     Rating: {movie.vote_average}
                   </p>
+                  <button className="bg-black hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded">
+                    Remove
+                  </button>
                 </div>
               ))}
             </div>
@@ -119,4 +116,4 @@ const Card = ({ category }) => {
   );
 };
 
-export default Card;
+export default WatchListCard;

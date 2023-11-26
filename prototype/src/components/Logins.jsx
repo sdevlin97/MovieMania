@@ -5,7 +5,7 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLogin, setIsLogin] = useState(true); // Added state to track login/signup mode\
+  const [isLogin, setIsLogin] = useState(true); // Added state to track login/signup mode
 
   const handleClose = () => {
     setTrigger(false);
