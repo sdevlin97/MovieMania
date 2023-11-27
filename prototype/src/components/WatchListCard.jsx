@@ -1,30 +1,63 @@
-/* eslint-disable react/jsx-key */
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { auth, checkLoginState, db } from "../firebase.js";
+import {
+  collection,
+  doc,
+  getDocs
+} from "firebase/firestore";
 
-const Card = () => {
-  const [data, setData] = useState(null); // Initialize the state with null or an initial value
-  const [loading, setLoading] = useState(true); // Optionally, you can track loading state
-  const [error, setError] = useState(null); // Optionally, track any errors
-
+const WatchListCard = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedMovies, setSelectedMovies] = useState([]);
   const scrollContainerRef = useRef(null);
 
+  const addData = (newData) => {
+    setData(prevData => {
+      // Ensure prevData is initialized as an empty array if it's undefined
+      const updatedData = prevData ? [...prevData, newData] : [newData];
+      return updatedData;
+    });
+  };
+
   useEffect(() => {
-    // Gets Popular Movies
+    async function fetchMovieListFromDatabase() {
+      let boolCheck = checkLoginState();
+
+      const user = auth.currentUser;
+      console.log("The current user id is: ", auth.currentUser);
+      let userID = String(user.uid);
+
+      if (boolCheck) {
+        console.log("The boolcheck is: ", boolCheck);
+        const docRef = doc(db, "users", userID);
+        const watchListColRef = collection(docRef, "watchList");
+        const docsSnap = await getDocs(watchListColRef);
+
+        const fetchedData = [];
+        docsSnap.forEach((doc) => {
+          console.log("The document data is: ", doc.data());
+          // addData(doc.data());
+          fetchedData.push(doc.data());
+          console.log("the data in fetchedData is: ", fetchedData);
+        });
+
+        return fetchedData;
+      }
+    }
+
     async function fetchData() {
       try {
-        const response = await fetch(
-          `https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies`
-        );
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        setData(result);
+        const response = await fetchMovieListFromDatabase();
+        // const jsonData = JSON.parse(response);
+        // console.log("The response before we convert to json data is: ", jsonData);
+      console.log("The response is: ", response);
+        setData(response);
         setLoading(false);
       } catch (error) {
+        console.log("The error in our catch block is: ", error);
         setError(error);
         setLoading(false);
       }
@@ -34,7 +67,6 @@ const Card = () => {
   }, []);
 
   const handleMovieSelect = (movie) => {
-    // Toggle the selected state of the movie
     if (selectedMovies.includes(movie)) {
       setSelectedMovies(selectedMovies.filter((m) => m !== movie));
     } else {
@@ -65,7 +97,7 @@ const Card = () => {
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
-        <p>Error: {error.message}</p>
+        <p>Siobahn!! Error: {error.message}</p>
       ) : data ? (
         <div className="relative">
           <button
@@ -85,24 +117,27 @@ const Card = () => {
             ref={scrollContainerRef}
           >
             <div className="flex space-x-4 p-4 pr-16">
-              {data.results.map((movie, index) => (
-                <div className="flex flex-col items-center p-4 rounded-lg shadow-md backdrop-blur-0 inline-block">
-                  <Link to={`/details/${movie.id}`}>
+              {data.map((movie) => (
+                <div
+                  key={movie.movie_id}
+                  className="flex flex-col items-center p-4 rounded-lg shadow-md backdrop-blur-0 inline-block"
+                >
+                  <Link to={`/details/${movie.movie_id}`}>
                     <img
-                      src={
-                        "https://image.tmdb.org/t/p/original/" +
-                        movie.poster_path
-                      }
-                      alt={movie.title}
+                      src={movie.poster}
+                      alt={movie.movie_title}
                       className="max-w-xs max-h-xs object-fill rounded-md mb-2"
                     />
                   </Link>
                   <h2 className="text-lg font-semibold text-white text-center">
-                    {movie.title}
+                    {movie.movie_title}
                   </h2>
                   <p className="text-gray-400 text-sm text-center">
                     Rating: {movie.vote_average}
                   </p>
+                  <button className="bg-black hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded">
+                    Remove
+                  </button>
                 </div>
               ))}
             </div>
@@ -113,4 +148,4 @@ const Card = () => {
   );
 };
 
-export default Card;
+export default WatchListCard;
