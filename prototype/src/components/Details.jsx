@@ -19,7 +19,7 @@ const Details = () => {
     return names.join(", ");
   }
 
-  async function addToWatchlist(id, title) {
+  async function addToWatchlist(id, title, backgroundImage, poster, release_date, genres, runtime, tagline, overview, vote_average) {
     let boolCheck = checkLoginState()
     console.log("The checked login state is: ", boolCheck);
     if (boolCheck) {
@@ -36,7 +36,15 @@ const Details = () => {
         const watchlistDocRef = doc(watchlistColRef, title);
         setDoc(watchlistDocRef, {
             movie_title: title,
-            movie_id: movieId
+            movie_id: movieId,
+            backgroundImage: `https://image.tmdb.org/t/p/original${backgroundImage}`,
+            poster: `https://image.tmdb.org/t/p/original${poster}`,
+            release_date: release_date,
+            genres: genres,
+            runtime: runtime,
+            tagline: tagline,
+            overview: overview,
+            vote_average: vote_average
         });
 
         // Add field to user document keeping track of what list collections we have
@@ -130,7 +138,7 @@ const Details = () => {
                 >
                   <i class="fa-solid fa-play mr-2 mt-4"></i> Watch Trailer
                 </button>
-                <button className="ml-20 text-white"  onClick={() => addToWatchlist(data.id, data.title)}>
+                <button className="ml-20 text-white"  onClick={() => addToWatchlist(data.id, data.title, data.backdrop_path, data.poster_path, data.release_date, data.genres, data.runtime, data.tagline, data.overview, data.vote_average)}>
                   <i class="fa-solid fa-plus"></i> Watchlist
                 </button>
               </div>
