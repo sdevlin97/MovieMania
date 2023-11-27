@@ -11,17 +11,10 @@ function Recommendations() {
     minHeight: "100vh",
   };
 
-  return (
+    return (
     <>
       <div style={containerStyle} className="relative bg-black">
-        <div className="text-white flex items-center h-20 p-2 lg:px-4 bg-black ">
-          Tags:
           <Tags></Tags>
-        </div>
-        <div className="text-white flex items-center h-20 p-2 lg:px-4 bg- bg-black">
-          Selected Tags:
-          <SelectedTags></SelectedTags>
-        </div>
         <div className="backdrop-blur ">
           <Card></Card>
         </div>

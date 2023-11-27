@@ -10,9 +10,11 @@ const axios = require("axios");
 const admin = require("firebase-admin");
 const bodyParser = require("body-parser");
 const cors = require("cors")({ origin: true });
+const cors2 = require('cors');
 const app = express();
 app.use(bodyParser.json());
 const fetch = require("node-fetch");
+const client = require('./elasticsearch/client');
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -73,5 +75,39 @@ app.get("/movieDetails/:id", async (req, res) => {
       functions.logger.error("error:" + err);
     });
 });
+
+
+app.use(cors2());
+
+app.get("/defaultTags", (req, res) => {
+  //const passedNewTag = req.query.newtag;
+  //const passedCurrTags = req.query.currtags;
+
+  async function sendESRequest() {
+    const body = await client.search({
+      index: "moviemania_tags",
+      body: {
+        size: 20,
+        aggs: {
+          by_tags: {
+            terms: {
+              field: "tag",
+              size: 20
+            }
+          }
+        }
+      }
+    });
+    res.json(body.aggregations.by_tags.buckets);
+  }
+  sendESRequest();
+});
+
+
+/*
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => console.group(`Server started on ${PORT}`));
+*/
 
 exports.app = functions.https.onRequest(app);
