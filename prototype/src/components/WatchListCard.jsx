@@ -36,20 +36,25 @@ const WatchListCard = () => {
         const watchListColRef = collection(docRef, "watchList");
         const docsSnap = await getDocs(watchListColRef);
 
+        const fetchedData = [];
         docsSnap.forEach((doc) => {
           console.log("The document data is: ", doc.data());
-          addData(doc.data());
+          // addData(doc.data());
+          fetchedData.push(doc.data());
+          console.log("the data in fetchedData is: ", fetchedData);
         });
+
+        return fetchedData;
       }
     }
 
     async function fetchData() {
       try {
         const response = await fetchMovieListFromDatabase();
-        const jsonData = JSON.parse(response);
-        console.log("The response before we convert to json data is: ", jsonData);
-      
-        setData(jsonData);
+        // const jsonData = JSON.parse(response);
+        // console.log("The response before we convert to json data is: ", jsonData);
+      console.log("The response is: ", response);
+        setData(response);
         setLoading(false);
       } catch (error) {
         console.log("The error in our catch block is: ", error);
@@ -89,109 +94,57 @@ const WatchListCard = () => {
 
   return (
     <div>
-    {data ? (
-      <div className="relative">
-      <button
-        className="absolute left-0 top-1/2 transform -translate-y-1/2 backdrop-blur-none text-white px-[12px] py-[50px] rounded-md hover:bg-black z-10 text-lg font-black"
-        onClick={scrollLeft}
-      >
-        &lt;
-      </button>
-      <button
-        className="absolute right-0 top-1/2 transform -translate-y-1/2 backdrop-blur-none text-white px-[12px] py-[50px] rounded-md hover:bg-black z-10 text-lg font-black"
-        onClick={scrollRight}
-      >
-        &gt;
-      </button>
-      <div
-        className="overflow-x-auto whitespace-nowrap"
-        ref={scrollContainerRef}
-      >
-        <div className="flex space-x-4 p-4 pr-16">
-          {data.map((movie) => (
-            <div
-              key={movie.movie_id}
-              className="flex flex-col items-center p-4 rounded-lg shadow-md backdrop-blur-0 inline-block"
-            >
-              <Link to={`/details/${movie.movie_id}`}>
-                <img
-                  src={movie.poster}
-                  alt={movie.movie_title}
-                  className="max-w-xs max-h-xs object-fill rounded-md mb-2"
-                />
-              </Link>
-              <h2 className="text-lg font-semibold text-white text-center">
-                {movie.movie_title}
-              </h2>
-              <p className="text-gray-400 text-sm text-center">
-                Rating: {movie.vote_average}
-              </p>
-              <button className="bg-black hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded">
-                Remove
-              </button>
+      {loading ? (
+        <p>Loading...</p>
+      ) : error ? (
+        <p>Siobahn!! Error: {error.message}</p>
+      ) : data ? (
+        <div className="relative">
+          <button
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 backdrop-blur-none text-white px-[12px] py-[50px] rounded-md hover:bg-black z-10 text-lg font-black"
+            onClick={scrollLeft}
+          >
+            &lt;
+          </button>
+          <button
+            className="absolute right-0 top-1/2 transform -translate-y-1/2 backdrop-blur-none text-white px-[12px] py-[50px] rounded-md hover:bg-black z-10 text-lg font-black"
+            onClick={scrollRight}
+          >
+            &gt;
+          </button>
+          <div
+            className="overflow-x-auto whitespace-nowrap"
+            ref={scrollContainerRef}
+          >
+            <div className="flex space-x-4 p-4 pr-16">
+              {data.map((movie) => (
+                <div
+                  key={movie.movie_id}
+                  className="flex flex-col items-center p-4 rounded-lg shadow-md backdrop-blur-0 inline-block"
+                >
+                  <Link to={`/details/${movie.movie_id}`}>
+                    <img
+                      src={movie.poster}
+                      alt={movie.movie_title}
+                      className="max-w-xs max-h-xs object-fill rounded-md mb-2"
+                    />
+                  </Link>
+                  <h2 className="text-lg font-semibold text-white text-center">
+                    {movie.movie_title}
+                  </h2>
+                  <p className="text-gray-400 text-sm text-center">
+                    Rating: {movie.vote_average}
+                  </p>
+                  <button className="bg-black hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded">
+                    Remove
+                  </button>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
-      </div>
+      ) : null}
     </div>
-    ) : (
-      <p>Loading.../and/or/error</p>
-    )}
-  </div>
-
-
-    // <div>
-    //   {loading ? (
-    //     <p>Loading...</p>
-    //   ) : error ? (
-    //     <p>Siobahn!! Error: {error.message}</p>
-    //   ) : data ? (
-    //     <div className="relative">
-    //       <button
-    //         className="absolute left-0 top-1/2 transform -translate-y-1/2 backdrop-blur-none text-white px-[12px] py-[50px] rounded-md hover:bg-black z-10 text-lg font-black"
-    //         onClick={scrollLeft}
-    //       >
-    //         &lt;
-    //       </button>
-    //       <button
-    //         className="absolute right-0 top-1/2 transform -translate-y-1/2 backdrop-blur-none text-white px-[12px] py-[50px] rounded-md hover:bg-black z-10 text-lg font-black"
-    //         onClick={scrollRight}
-    //       >
-    //         &gt;
-    //       </button>
-    //       <div
-    //         className="overflow-x-auto whitespace-nowrap"
-    //         ref={scrollContainerRef}
-    //       >
-    //         <div className="flex space-x-4 p-4 pr-16">
-    //           {data.map((movie) => (
-    //             <div
-    //               key={movie.movie_id}
-    //               className="flex flex-col items-center p-4 rounded-lg shadow-md backdrop-blur-0 inline-block"
-    //             >
-    //               <Link to={`/details/${movie.movie_id}`}>
-    //                 <img
-    //                   src={movie.poster}
-    //                   alt={movie.movie_title}
-    //                   className="max-w-xs max-h-xs object-fill rounded-md mb-2"
-    //                 />
-    //               </Link>
-    //               <h2 className="text-lg font-semibold text-white text-center">
-    //                 {movie.movie_title}
-    //               </h2>
-    //               <p className="text-gray-400 text-sm text-center">
-    //                 Rating: {movie.vote_average}
-    //               </p>
-    //               <button className="bg-black hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded">
-    //                 Remove
-    //               </button>
-    //             </div>
-    //           ))}
-    //         </div>
-    //       </div>
-    //     </div>
-    //   ) : null}
-    // </div>
   );
 };
 
