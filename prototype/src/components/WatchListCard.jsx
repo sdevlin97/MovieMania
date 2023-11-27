@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
+import { auth, checkLoginState, db } from "../firebase.js"
+import { getFirestore, collection, addDoc, doc, getDocs, setDoc, updateDoc } from "firebase/firestore";
 
 const WatchListCard = () => {
   const [data, setData] = useState(null);
@@ -7,6 +9,8 @@ const WatchListCard = () => {
   const [error, setError] = useState(null);
   const [selectedMovies, setSelectedMovies] = useState([]);
   const scrollContainerRef = useRef(null);
+
+
 
   useEffect(() => {
     async function fetchData() {
