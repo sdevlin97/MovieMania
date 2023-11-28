@@ -3,9 +3,6 @@ import React, { useState } from "react";
 import Tags from "./Tags";
 import SelectedTags from "./SelectedTags";
 import Card from "./Card";
-<<<<<<< HEAD
-// SelectedTags is the same component as Tags, just to differ them here since they have diffrent hard coded data
-=======
 // SelectedTags is the same component has Tags, just to differ them here since they have diffrent hard coded data
 
 const AllTags = [
@@ -44,7 +41,6 @@ const AllTags = [
   { name: "Disaster" },
 ];
 
->>>>>>> origin/main
 function Recommendations() {
   const containerStyle = {
     backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,
@@ -86,11 +82,7 @@ function Recommendations() {
           />
         </div>
         <div className="backdrop-blur ">
-<<<<<<< HEAD
-        <Card category="popular" /> {/* Display "Trending" movies by default */}
-=======
           <Card />
->>>>>>> origin/main
         </div>
         <div className="flex flex-col items-center justify-center pt-4 pb-20 backdrop-blur">
           <input
