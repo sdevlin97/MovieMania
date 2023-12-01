@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createAccount, logIntoExistingAccount, auth } from "../firebase.js"
+import { createAccount, logIntoExistingAccount, auth } from "../firebase.js";
 
 function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
   const [username, setUsername] = useState("");
