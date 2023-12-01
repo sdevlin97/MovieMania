@@ -17,7 +17,6 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
       handleLogin(email, password);
       logIntoExistingAccount(auth, email, password);
     } else {
-      // Add your signup logic here
       handleSignup(username, email, password);
       createAccount(auth, username, email, password);
     }
@@ -38,21 +37,23 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
           {isLogin ? "Login" : "Signup"}
         </h2>
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="username"
-              className="block text-white font-bold mb-2"
-            >
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="border rounded w-full py-2 px-3 text-black"
-            />
-          </div>
+          {!isLogin && (
+            <div className="mb-4">
+              <label
+                htmlFor="username"
+                className="block text-white font-bold mb-2"
+              >
+                Username
+              </label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="border rounded w-full py-2 px-3 text-black"
+              />
+            </div>
+          )}
           <div className="mb-4">
             <label htmlFor="email" className="block text-white font-bold mb-2">
               Email
@@ -88,7 +89,7 @@ function Logins({ trigger, setTrigger, handleLogin, handleSignup }) {
           </button>
         </form>
         <button
-          className=" text-white font-bold py-2 rounded mt-2 content-center"
+          className="text-white font-bold py-2 rounded mt-2 content-center"
           onClick={toggleMode}
         >
           Switch to {isLogin ? "Signup" : "Login"}
