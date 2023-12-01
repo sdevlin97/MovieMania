@@ -79,19 +79,84 @@ app.get("/movieDetails/:id", async (req, res) => {
 
 app.use(cors2());
 
-app.get("/defaultTags", (req, res) => {
-  //const passedNewTag = req.query.newtag;
-  //const passedCurrTags = req.query.currtags;
-
+app.get("/fetchDefaultTags", (req, res) => {
   async function sendESRequest() {
     const body = await client.search({
-      index: "moviemania_tags",
+      index: "moviemania_tags_v3",
       body: {
         size: 20,
         aggs: {
           by_tags: {
             terms: {
-              field: "tag",
+              field: "tag.keyword",
+              size: 20
+            }
+          }
+        }
+      }
+    });
+    res.json(body.aggregations.by_tags.buckets);
+  }
+  sendESRequest();
+});
+
+app.get("/fetchMovieIds", (req, res) => {
+  passedTags = req.query.tags;
+
+  async function sendESRequest() {
+    const body = await client.search({
+      index: "moviemania_tags_v3",
+      body: {
+        size: 20,
+        query: {
+          bool: {
+            should: [
+              {
+                match: {
+                  tag: passedTags
+                }
+              }
+            ]
+          }
+        },
+        aggs: {
+          by_movieid: {
+            terms: {
+              field: "movieid.keyword",
+              size: 20
+            }
+          }
+        }
+      }
+    });
+    res.json(body.aggregations.by_movieid.buckets);
+  }
+  sendESRequest();
+});
+
+app.get("/fetchNewTags", (req, res) => {
+  passedMovieIds = req.query.movieids;
+
+  async function sendESRequest() {
+    const body = await client.search({
+      index: "moviemania_tags_v3",
+      body: {
+        size: 20,
+        query: {
+          bool: {
+            should: [
+              {
+                match: {
+                  movieid: passedMovieIds
+                }
+              }
+            ]
+          }
+        },
+        aggs: {
+          by_tags: {
+            terms: {
+              field: "tag.keyword",
               size: 20
             }
           }
