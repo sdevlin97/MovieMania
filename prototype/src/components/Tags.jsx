@@ -91,7 +91,7 @@ const Tags = () => {
         var stringMovieIds = "";
 
         for (const value of moviesReturned) {
-          stringMovieIds = stringMovieIds + value + " ";
+          stringMovieIds = stringMovieIds + value.key + " ";
         }
 
         const results = {
@@ -112,7 +112,7 @@ const Tags = () => {
           });
       };
 
-      //fetchNewTags();
+      fetchNewTags();
     }
   }, [moviesReturned]);
 
