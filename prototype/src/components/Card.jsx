@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-const Card = () => {
+const Card = ({movieInfoTMDb}) => {
   const [data, setData] = useState(null); // Initialize the state with null or an initial value
   const [loading, setLoading] = useState(true); // Optionally, you can track loading state
   const [error, setError] = useState(null); // Optionally, track any errors
@@ -11,27 +11,34 @@ const Card = () => {
   const scrollContainerRef = useRef(null);
 
   useEffect(() => {
-    // Gets Popular Movies
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          `https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies`
-        );
+    
+    if (movieInfoTMDb.length == 0) {
+      // Gets Popular Movies
+      async function fetchData() {
+        try {
+          const response = await fetch(
+            `https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies`
+          );
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const result = await response.json();
+          setData(result);
+          console.log("Data is: ", result);
+          setLoading(false);
+        } catch (error) {
+          setError(error);
+          setLoading(false);
         }
-        const result = await response.json();
-        setData(result);
-        console.log("Data is", result);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
       }
-    }
 
-    fetchData();
+      fetchData();
+    }
+    else {
+      setData(movieInfoTMDb);
+      console.log("Data is: ", )
+    }
   }, []);
 
   const handleMovieSelect = (movie) => {

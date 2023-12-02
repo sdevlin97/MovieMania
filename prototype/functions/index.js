@@ -104,7 +104,7 @@ app.get("/fetchDefaultTags", (req, res) => {
 
 // Call to Elasticsearch, searches for passed (selected) tags and returns movieids in order of most connections to tags
 // Returns 20 objects of key (movieid) : doc_count (number of times movieid was tagged with selected tags)
-app.get("/fetchMovieIds", (req, res) => {
+app.get("/fetchMLIds", (req, res) => {
   passedTags = req.query.tags;
 
   async function sendESRequest() {
@@ -176,12 +176,12 @@ app.get("/fetchNewTags", (req, res) => {
 
 // Call to Elasticsearch, searches for passed MovieLens movieids and returns movieids for IMDb and TMDb
 // Returns 20 objects (we only need _source.tmdbId)
-app.get("/fetchElasticMovieInfo", (req, res) => {
+app.get("/fetchTMDbIds", (req, res) => {
   passedMovieIds = req.query.movieids;
 
   async function sendESRequest() {
     const body = await client.search({
-      index: "moviemania_link_v2",
+      index: "moviemania_links_v2",
       body: {
         size: 20,
         query: {
