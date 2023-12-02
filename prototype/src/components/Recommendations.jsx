@@ -73,7 +73,7 @@ const saveTagList = async (tagList, tagListName) => {
       }
     }
   
-    // Trigger for when tagsSelected is changed
+  // Trigger for when tagsSelected is changed
   // Loads default tags or returns movieids
   useEffect(() => {
 
@@ -280,7 +280,7 @@ const saveTagList = async (tagList, tagListName) => {
           />
         <div className="backdrop-blur ">
           <Card
-            movieInfoTMDb={movieInfoTMDb}
+            
           />
         </div>
         <div className="flex flex-col items-center justify-center pt-4 pb-20 backdrop-blur">
