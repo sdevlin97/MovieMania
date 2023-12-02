@@ -76,9 +76,11 @@ app.get("/movieDetails/:id", async (req, res) => {
     });
 });
 
-
+// Made another cors as example project did not have the {origin:true} modifier and wanted to be safe
 app.use(cors2());
 
+// Default, no-parameter call to Elasticsearch for the most commonly used tags
+// Returns 20 objects of key (tag name) : doc_count (number of times tag was used)
 app.get("/fetchDefaultTags", (req, res) => {
   async function sendESRequest() {
     const body = await client.search({
@@ -100,6 +102,8 @@ app.get("/fetchDefaultTags", (req, res) => {
   sendESRequest();
 });
 
+// Call to Elasticsearch, searches for passed (selected) tags and returns movieids in order of most connections to tags
+// Returns 20 objects of key (movieid) : doc_count (number of times movieid was tagged with selected tags)
 app.get("/fetchMovieIds", (req, res) => {
   passedTags = req.query.tags;
 
@@ -134,6 +138,8 @@ app.get("/fetchMovieIds", (req, res) => {
   sendESRequest();
 });
 
+// Call to Elasticsearch, searches for passed movieids and returns tags in order of highest use amongst the movieids
+// Returns 20 objects of key (tag name) : doc_count (number of times tag was associated with the passed movieids)
 app.get("/fetchNewTags", (req, res) => {
   passedMovieIds = req.query.movieids;
 
@@ -167,12 +173,5 @@ app.get("/fetchNewTags", (req, res) => {
   }
   sendESRequest();
 });
-
-
-/*
-const PORT = process.env.PORT || 3001;
-
-app.listen(PORT, () => console.group(`Server started on ${PORT}`));
-*/
 
 exports.app = functions.https.onRequest(app);

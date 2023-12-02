@@ -3,44 +3,22 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 const Tags = () => {
-  const [tagsAvailable, setTagsAvailable] = useState([]);
-  const [tagsSelected, setTagsSelected] = useState([]);
-  const [moviesReturned, setMoviesReturned] = useState([]);
+  const [tagsAvailable, setTagsAvailable] = useState([]); // Array of objects [key (tag name): doc_count (# of instances)] - Tags available to be selected
+  const [tagsSelected, setTagsSelected] = useState([]); // Array of strings - Tags that have been selected
+  const [moviesReturned, setMoviesReturned] = useState([]); // Array of objects [key (movieid): doc_count (# of instances)] - Movieids returned from searching with tagsSelected
   
-  /*
+  // Trigger for when tagsSelected is changed
+  // Loads default tags or returns movieids
   useEffect(() => {
-    const fetchDefaultTags = () => {
-      const results = {
-        method: 'GET',
-        url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchDefaultTags',
-        params: {
-          //tag: chosenTag
-        }
-      };
-      axios
-        .request(results)
-        .then((response) => {
-          console.log(response.data);
-          setTagsAvailable(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    };
 
-    fetchDefaultTags();
-  }, []);
-  */
-
-  useEffect(() => {
+    // Elastic won't accept blank search inputs, so if blank = load default tags
     if (tagsSelected.length == 0) {
+
+      // Calls Elasticsearch for default tags, sets returned list of objects (tag) to setTagsAvailable
       const fetchDefaultTags = () => {
         const results = {
           method: 'GET',
-          url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchDefaultTags',
-          params: {
-            //tag: chosenTag
-          }
+          url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchDefaultTags'
         };
         axios
           .request(results)
@@ -56,13 +34,19 @@ const Tags = () => {
       fetchDefaultTags();
     }
     else {
+
+      // Sends list of selected tags to Elasticsearch to search, sets returned list of objects (movieid) to moviesReturned
       const fetchMovieIds = () => {
+
+        // Create string for parameter transfer as we're transferring multiple items under the same parameter name
         var stringTags = "";
 
+        // Build parameter string using strings of tagsSelected
         for (const value of tagsSelected) {
           stringTags = stringTags + value + " ";
         }
 
+        // Call to Elastic and set, described above fetchMovieIds
         const results = {
           method: 'GET',
           url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchMovieIds',
@@ -85,15 +69,26 @@ const Tags = () => {
     }
   }, [tagsSelected]);
 
+  // Trigger for when moviesReturned is changed
+  // Uses movieids in moviesReturned to search for tags associated and set to tagsAvailable
+  // *Note: Originally this was inside previous useEffect. I split it up for debugging an error and since it works like this, I never undid it :shrug:
   useEffect(() => {
+    
+    // Elastic won't accept blank search inputs, so if blank = do nothing
     if (!moviesReturned.length == 0) {
+      
+      // Calls Elasticsearch for tags associated with movieids, sets returned list of objects (tag) to setTagsAvailable
       const fetchNewTags = () => {
+        
+        // Create string for parameter transfer as we're transferring multiple items under the same parameter name
         var stringMovieIds = "";
-
+        
+        // Build parameter string using strings of tagsSelected
         for (const value of moviesReturned) {
           stringMovieIds = stringMovieIds + value.key + " ";
         }
 
+        // Call to Elastic and set, described above fetchNewTags
         const results = {
           method: 'GET',
           url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchNewTags',
@@ -116,12 +111,14 @@ const Tags = () => {
     }
   }, [moviesReturned]);
 
+  // Adds tag to tagsSelected, triggering useEffect [tagsSelected]
   const handleTagSelect = (tag) => {
     if (!tagsSelected.includes(tag)) {
       setTagsSelected([...tagsSelected, tag]);
     }    
   };
 
+  // Removes tag from tagsSelected, triggering useEffect [tagsSelected]
   const handleTagRemove = (tag) => {
     setTagsSelected(tagsSelected.filter((m) => m !== tag));
   };
