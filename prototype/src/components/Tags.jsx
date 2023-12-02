@@ -111,6 +111,21 @@ const Tags = () => {
     }
   }, [moviesReturned]);
 
+  // Trigger for when tagsAvailable is changed
+  // Ensures selected tags are not displayed in available tags
+  useEffect(() => {
+
+    // Loops through Selected and Available checking for duplicates between the two
+    // If selected tag is found in available tags, it is removed from available tags
+    for (const valueSelected of tagsSelected) {
+      for (const valueAvailable of tagsAvailable) {
+        if (valueAvailable.key == valueSelected) {              
+          setTagsAvailable(tagsAvailable.filter((m) => m !== valueAvailable));
+        }
+      }
+    }    
+  }, [tagsAvailable]);
+
   // Adds tag to tagsSelected, triggering useEffect [tagsSelected]
   const handleTagSelect = (tag) => {
     if (!tagsSelected.includes(tag)) {
