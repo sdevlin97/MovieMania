@@ -174,4 +174,32 @@ app.get("/fetchNewTags", (req, res) => {
   sendESRequest();
 });
 
+// Call to Elasticsearch, searches for passed MovieLens movieids and returns movieids for IMDb and TMDb
+// Returns 20 objects (we only need _source.tmdbId)
+app.get("/fetchElasticMovieInfo", (req, res) => {
+  passedMovieIds = req.query.movieids;
+
+  async function sendESRequest() {
+    const body = await client.search({
+      index: "moviemania_link_v2",
+      body: {
+        size: 20,
+        query: {
+          bool: {
+            should: [
+              {
+                match: {
+                  ml_movieid: passedMovieIds
+                }
+              }
+            ]
+          }
+        }
+      }
+    });
+    res.json(body.hits.hits);
+  }
+  sendESRequest();
+});
+
 exports.app = functions.https.onRequest(app);

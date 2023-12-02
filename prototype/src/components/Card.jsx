@@ -23,6 +23,7 @@ const Card = () => {
         }
         const result = await response.json();
         setData(result);
+        console.log("Data is", result);
         setLoading(false);
       } catch (error) {
         setError(error);
