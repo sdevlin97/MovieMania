@@ -123,8 +123,6 @@ async function addNewUserToDatabase(db, user, username) {
     await setDoc(doc(db, "users", String(user.uid)), {
       username: username,
       email: user.email,
-      watchList: [],
-      tagList: []
     });
     console.log("Document has been written")
     console.log("Document written with ID: ", user.uid);

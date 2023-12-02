@@ -23,14 +23,14 @@ const Details = () => {
     let boolCheck = checkLoginState()
     console.log("The checked login state is: ", boolCheck);
     if (boolCheck) {
-        //add wishlist firebase code here
+        //add watchlist firebase code here
         let movieId = id;
         const user = auth.currentUser;
         let userID = String(user.uid);
         
         console.log("The movie ID is: ", movieId);
         console.log("The movie title is: ", title);
-        // Creates the custom wishlist and adds data in the database
+        // Creates the custom watchlist and adds data in the database
         const userRef = doc(db, "users", userID);
         const watchlistColRef = collection(userRef, "watchList");
         const watchlistDocRef = doc(watchlistColRef, title);
@@ -56,7 +56,7 @@ const Details = () => {
 
     } else {
         // don't add logic to buttons
-        alert("You must be logged in to add to your Watchlist.")
+        alert("You must be logged in to add to your Watchlist.");
     }
   }
 

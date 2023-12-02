@@ -2,19 +2,72 @@ import Tags from "./Tags";
 import Card from "./Card";
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { getFirestore, collection, addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import { auth, checkLoginState, db } from "../firebase.js"
+import { Slide, ToastContainer, toast } from 'react-toastify';
 
-function Recommendations() {
-  const containerStyle = {
-    backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,
-    backgroundSize: "cover",
-    backgroundRepeat: "no-repeat",
-    backgroundAttachment: "fixed",
-    minHeight: "100vh",
-  };
+  function Recommendations() {
+    const [tagsAvailable, setTagsAvailable] = useState([]); // Array of objects [key (tag name): doc_count (# of instances)] - Tags available to be selected
+    const [tagsSelected, setTagsSelected] = useState([]); // Array of strings - Tags that have been selected
+    const [moviesReturned, setMoviesReturned] = useState([]); // Array of objects [key (movieid): doc_count (# of instances)] - Movieids returned from searching with tagsSelected
   
-  const [tagsAvailable, setTagsAvailable] = useState([]); // Array of objects [key (tag name): doc_count (# of instances)] - Tags available to be selected
-  const [tagsSelected, setTagsSelected] = useState([]); // Array of strings - Tags that have been selected
-  const [moviesReturned, setMoviesReturned] = useState([]); // Array of objects [key (movieid): doc_count (# of instances)] - Movieids returned from searching with tagsSelected
+    const [tagListName, setTagListName] = useState("");
+  
+    const handleTagListNameChange = (event) => {
+      setTagListName(event.target.value);
+    }
+
+    const containerStyle = {
+      backgroundImage: `url('./pawel-czerwinski-XM1YUUVXj64-unsplash.jpg')`,
+      backgroundSize: "cover",
+      backgroundRepeat: "no-repeat",
+      backgroundAttachment: "fixed",
+      minHeight: "100vh",
+    };
+  
+const saveTagList = async (tagList, tagListName) => {
+      let toastId = "Taglist status"
+      // need to have an entry for a given list
+      let boolCheck = checkLoginState();
+      if(boolCheck) {
+        let user = auth.currentUser;
+        let userID = String(user.uid);
+  
+        console.log("The list of tags is: ", tagList);
+  
+        // creates the tagList in the database
+        const userRef = doc(db, "users", userID);
+        const tagListColRef = collection(userRef, "tagList");
+        const tagListDocRef = doc(tagListColRef, tagListName);
+  
+        setDoc(tagListDocRef, {
+          tagList: tagList
+        });
+        await updateDoc(doc(db, "users", userID), {wishlist: "true"});
+        toast.success("Tag list saved successfully!", {
+          position: toast.POSITION.TOP_LEFT,
+          autoClose: 3000, //3 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          toastId,
+          transition: Slide
+        });
+      
+      } else {
+        toast.success("You must be logged in to save your tag list", {
+          position: toast.POSITION.TOP_LEFT,
+          autoClose: 3000, //3 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          toastId,
+          transition: Slide
+        });
+      }
+    }
   
   // Trigger for when tagsSelected is changed
   // Loads default tags or returns movieids
@@ -160,10 +213,12 @@ function Recommendations() {
         <div className="flex flex-col items-center justify-center pt-4 pb-20 backdrop-blur">
           <input
             type="text"
+            value={tagListName}
+            onChange={handleTagListNameChange}
             placeholder="Enter a name for the list"
             className="bg-white p-2 rounded-md shadow-md"
           />
-          <button className="bg-blue-500 text-white rounded-md mt-2 px-20 py-4">
+          <button onClick={() => saveTagList(tagsSelected, tagListName)} className="bg-blue-500 text-white rounded-md mt-2 px-20 py-4">
             Save
           </button>
         </div>
