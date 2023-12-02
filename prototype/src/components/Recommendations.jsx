@@ -17,9 +17,10 @@ function Recommendations() {
   const [movieIdsML, setMovieIdsML] = useState([]); // Array of objects [key (ML movieid): doc_count (# of instances)] - Movieids returned from searching with tagsSelected
   const [movieIdsTMDb, setMovieIdsTMDb] = useState([]); // Array of objects including ID for TMDb
   const [movieInfoTMDb, setMovieInfoTMDb] = useState([]); // Array of objects - Info for movies from TMDb
+  const [loading, setLoading] = useState(true); // Optionally, you can track loading state
   const [error, setError] = useState(null); // Optionally, track any errors
   
-    // Trigger for when tagsSelected is changed
+  // Trigger for when tagsSelected is changed
   // Loads default tags or returns movieids
   useEffect(() => {
 
@@ -226,7 +227,7 @@ function Recommendations() {
           />
         <div className="backdrop-blur ">
           <Card
-            movieInfoTMDb={movieInfoTMDb}
+            
           />
         </div>
         <div className="flex flex-col items-center justify-center pt-4 pb-20 backdrop-blur">

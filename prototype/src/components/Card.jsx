@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-const Card = ({movieInfoTMDb}) => {
+const Card = () => {
   const [data, setData] = useState(null); // Initialize the state with null or an initial value
   const [loading, setLoading] = useState(true); // Optionally, you can track loading state
   const [error, setError] = useState(null); // Optionally, track any errors
@@ -12,7 +12,7 @@ const Card = ({movieInfoTMDb}) => {
 
   useEffect(() => {
     
-    if (movieInfoTMDb.length == 0) {
+    
       // Gets Popular Movies
       async function fetchData() {
         try {
@@ -34,11 +34,7 @@ const Card = ({movieInfoTMDb}) => {
       }
 
       fetchData();
-    }
-    else {
-      setData(movieInfoTMDb);
-      console.log("Data is: ", )
-    }
+    
   }, []);
 
   const handleMovieSelect = (movie) => {
