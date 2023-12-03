@@ -102,6 +102,29 @@ app.get("/fetchDefaultTags", (req, res) => {
   sendESRequest();
 });
 
+// Default, no-parameter call to Elasticsearch for the most commonly tagged movieids
+// Returns 20 objects of key (movieid) : doc_count (number of times tag was used)
+app.get("/fetchDefaultMLIds", (req, res) => {
+  async function sendESRequest() {
+    const body = await client.search({
+      index: "moviemania_tags_v3",
+      body: {
+        size: 20,
+        aggs: {
+          by_movieid: {
+            terms: {
+              field: "movieid.keyword",
+              size: 20
+            }
+          }
+        }
+      }
+    });
+    res.json(body.aggregations.by_movieid.buckets);
+  }
+  sendESRequest();
+});
+
 // Call to Elasticsearch, searches for passed (selected) tags and returns movieids in order of most connections to tags
 // Returns 20 objects of key (movieid) : doc_count (number of times movieid was tagged with selected tags)
 app.get("/fetchMLIds", (req, res) => {

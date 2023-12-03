@@ -12,6 +12,7 @@ import { Slide, ToastContainer, toast } from 'react-toastify';
     const [tagsSelected, setTagsSelected] = useState([]); // Array of strings - Tags that have been selected
     const [movieIdsML, setMovieIdsML] = useState([]); // Array of objects [key (ML movieid): doc_count (# of instances)] - Movieids returned from searching with tagsSelected
     const [movieIdsTMDb, setMovieIdsTMDb] = useState([]); // Array of objects including ID for TMDb
+    const [movieIdsTEMP, setMovieIdsTEMP] = useState([]); // Array of objects [key (ML movieid): doc_count (# of instances)] - Temp for duplicating movieIdsTMDb
     const [movieInfoTMDb, setMovieInfoTMDb] = useState([]); // Array of objects - Info for movies from TMDb
     const [tagListName, setTagListName] = useState("");
     const [loading, setLoading] = useState(true);
@@ -74,8 +75,9 @@ const saveTagList = async (tagList, tagListName) => {
     }
   
   // Trigger for when tagsSelected is changed
-  // Loads default tags or returns movieids
+  // Loads default tags or returns ML movieids
   useEffect(() => {
+    setMovieInfoTMDb([]);
 
     // Elastic won't accept blank search inputs, so if blank = load default tags
     if (tagsSelected.length == 0) {
@@ -98,6 +100,25 @@ const saveTagList = async (tagList, tagListName) => {
       };
   
       fetchDefaultTags();
+
+      // Calls Elasticsearch for default movieids, sets returned list of objects (movieid) to movieIdsML
+      const fetchDefaultMLIds = () => {
+        const results = {
+          method: 'GET',
+          url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchDefaultMLIds',
+        };
+        axios
+          .request(results)
+          .then((response) => {
+            console.log(response.data);
+            setMovieIdsML(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
+      fetchDefaultMLIds();
     }
     else {
 
@@ -106,13 +127,11 @@ const saveTagList = async (tagList, tagListName) => {
 
         // Create string for parameter transfer as we're transferring multiple items under the same parameter name
         var stringTags = "";
-
-        // Build parameter string using strings of tagsSelected
         for (const value of tagsSelected) {
           stringTags = stringTags + value + " ";
         }
 
-        // Call to Elastic and set, described above fetchMovieIds
+        // Call to Elastic and set
         const results = {
           method: 'GET',
           url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchMLIds',
@@ -135,9 +154,8 @@ const saveTagList = async (tagList, tagListName) => {
     }
   }, [tagsSelected]);
 
-  // Trigger for when moviesReturned is changed
-  // Uses movieids in moviesReturned to search for tags associated and set to tagsAvailable
-  // *Note: Originally this was inside previous useEffect. I split it up for debugging an error and since it works like this, I never undid it :shrug:
+  // Trigger for when movieIdsML is changed
+  // Uses movieids in movieIdsML to search for tags associated and set to tagsAvailable
   useEffect(() => {
     
     // Elastic won't accept blank search inputs, so if blank = do nothing
@@ -148,13 +166,11 @@ const saveTagList = async (tagList, tagListName) => {
         
         // Create string for parameter transfer as we're transferring multiple items under the same parameter name
         var stringMovieIds = "";
-        
-        // Build parameter string using strings of tagsSelected
         for (const value of movieIdsML) {
           stringMovieIds = stringMovieIds + value.key + " ";
         }
 
-        // Call to Elastic and set, described above fetchNewTags
+        // Call to Elastic and set
         const results = {
           method: 'GET',
           url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchNewTags',
@@ -180,13 +196,11 @@ const saveTagList = async (tagList, tagListName) => {
         
         // Create string for parameter transfer as we're transferring multiple items under the same parameter name
         var stringMovieIds = "";
-        
-        // Build parameter string using strings of tagsSelected
         for (const value of movieIdsML) {
           stringMovieIds = stringMovieIds + value.key + " ";
         }
 
-        // Call to Elastic and set, described above fetchNewTags
+        // Call to Elastic and set
         const results = {
           method: 'GET',
           url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchTMDbIds',
@@ -199,6 +213,7 @@ const saveTagList = async (tagList, tagListName) => {
           .then((response) => {
             console.log(response.data);
             setMovieIdsTMDb(response.data);
+            setMovieIdsTEMP(response.data);
           })
           .catch((error) => {
             console.error(error);
@@ -221,43 +236,48 @@ const saveTagList = async (tagList, tagListName) => {
           setTagsAvailable(tagsAvailable.filter((m) => m !== valueAvailable));
         }
       }
-    }    
+    } 
   }, [tagsAvailable]);
 
-  // Trigger for when moviesReturned is changed
-  // Uses movieids in moviesReturned to search for tags associated and set to tagsAvailable
-  // *Note: Originally this was inside previous useEffect. I split it up for debugging an error and since it works like this, I never undid it :shrug:
+  // Trigger for when movieIdsTMDb is changed
+  // Uses TMDb movieids in movieIdsTMDb to search for tags associated and set to movieInfoTMDb
   useEffect(() => {
-    
+        
     // Elastic won't accept blank search inputs, so if blank = do nothing
-    if (!movieIdsTMDb.length == 0) {
-      setMovieInfoTMDb([]);
+    if (!movieIdsTEMP.length == 0) {
       
-      for (const value of movieIdsTMDb) {
-        async function fetchTMDbMovieInfo() {
-          try {
-            const response = await fetch(
-              `https://us-central1-moviemania-ba604.cloudfunctions.net/app/movieDetails/${value._source.tmdbId}`
-            );
+      async function fetchTMDbMovieInfo() {
+        try {
+          const response = await fetch(
+            `https://us-central1-moviemania-ba604.cloudfunctions.net/app/movieDetails/${movieIdsTEMP[0]._source.tmdbId}`
+          );
     
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            const result = await response.json();
-            console.log("The movie details we got is: ", result);
-            setMovieInfoTMDb([...movieInfoTMDb, result]);
-            setLoading(false);
-          } catch (error) {
-            setError(error);
-            setLoading(false);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
           }
+          const result = await response.json();
+          console.log("The movie details we got is: ", result);
+          setMovieInfoTMDb([...movieInfoTMDb, result]);
+          setLoading(false);
+        } catch (error) {
+          setError(error);
+          setLoading(false);
         }
-    
-        fetchTMDbMovieInfo();
-      }
+      }      
+
+      fetchTMDbMovieInfo();  
+    }
+    else {
       console.log("Movie Info: ", movieInfoTMDb);
     }
-  }, [movieIdsTMDb]);
+    
+  }, [movieIdsTEMP]);
+
+  useEffect(() => {
+        
+    setMovieIdsTEMP(movieIdsTEMP.filter((m) => m !== movieIdsTEMP[0]));
+    
+  }, [movieInfoTMDb]);
 
   // Adds/Removes tag to tagsSelected, triggering useEffect [tagsSelected]
   const handleTagClick = (tag, action) => {
@@ -280,7 +300,7 @@ const saveTagList = async (tagList, tagListName) => {
           />
         <div className="backdrop-blur ">
           <Card
-            
+            movieInfoTMDb={movieInfoTMDb}
           />
         </div>
         <div className="flex flex-col items-center justify-center pt-4 pb-20 backdrop-blur">
