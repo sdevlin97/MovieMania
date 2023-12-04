@@ -12,7 +12,7 @@ import { Slide, ToastContainer, toast } from 'react-toastify';
     const [tagsSelected, setTagsSelected] = useState([]); // Array of strings - Tags that have been selected
     const [movieIdsML, setMovieIdsML] = useState([]); // Array of objects [key (ML movieid): doc_count (# of instances)] - Movieids returned from searching with tagsSelected
     const [movieIdsTMDb, setMovieIdsTMDb] = useState([]); // Array of objects including ID for TMDb
-    const [movieIdsTEMP, setMovieIdsTEMP] = useState([]); // Array of objects [key (ML movieid): doc_count (# of instances)] - Temp for duplicating movieIdsTMDb
+    const [movieIdsTEMP, setMovieIdsTEMP] = useState([]); // Temp duplicate of movieIdsTMDb, in case we later need the full list to still be preserved
     const [movieInfoTMDb, setMovieInfoTMDb] = useState([]); // Array of objects - Info for movies from TMDb
     const [tagListName, setTagListName] = useState("");
     const [loading, setLoading] = useState(true);
@@ -75,31 +75,12 @@ const saveTagList = async (tagList, tagListName) => {
     }
   
   // Trigger for when tagsSelected is changed
-  // Loads default tags or returns ML movieids
+  // Loads default ML movieids or returns ML movieids based on selectedTags
   useEffect(() => {
     setMovieInfoTMDb([]);
 
     // Elastic won't accept blank search inputs, so if blank = load default tags
     if (tagsSelected.length == 0) {
-
-      // Calls Elasticsearch for default tags, sets returned list of objects (tag) to setTagsAvailable
-      const fetchDefaultTags = () => {
-        const results = {
-          method: 'GET',
-          url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchDefaultTags'
-        };
-        axios
-          .request(results)
-          .then((response) => {
-            console.log(response.data);
-            setTagsAvailable(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      };
-  
-      fetchDefaultTags();
 
       // Calls Elasticsearch for default movieids, sets returned list of objects (movieid) to movieIdsML
       const fetchDefaultMLIds = () => {
@@ -122,7 +103,7 @@ const saveTagList = async (tagList, tagListName) => {
     }
     else {
 
-      // Sends list of selected tags to Elasticsearch to search, sets returned list of objects (movieid) to moviesReturned
+      // Sends list of selected tags to Elasticsearch to search, sets returned list of objects (movieid) to movieIdsML
       const fetchMLIds = () => {
 
         // Create string for parameter transfer as we're transferring multiple items under the same parameter name
@@ -155,12 +136,12 @@ const saveTagList = async (tagList, tagListName) => {
   }, [tagsSelected]);
 
   // Trigger for when movieIdsML is changed
-  // Uses movieids in movieIdsML to search for tags associated and set to tagsAvailable
+  // Uses movieids in movieIdsML to search for TMDb movieIds and set to movieIdsTMDb, duplicated to movieIdsTEMP for loop-removing ids later
   useEffect(() => {
     
     // Elastic won't accept blank search inputs, so if blank = do nothing
     if (!movieIdsML.length == 0) {
-      
+            
       // Calls Elasticsearch for tags associated with movieids, sets returned list of objects (tag) to setTagsAvailable
       const fetchNewTags = () => {
         
@@ -239,13 +220,13 @@ const saveTagList = async (tagList, tagListName) => {
     } 
   }, [tagsAvailable]);
 
-  // Trigger for when movieIdsTMDb is changed
-  // Uses TMDb movieids in movieIdsTMDb to search for tags associated and set to movieInfoTMDb
+  // Trigger for when movieIdsTEMP is changed
+  // Uses TMDb movieids in movieIdsTEMP to return movie info details from TMDb
   useEffect(() => {
         
-    // Elastic won't accept blank search inputs, so if blank = do nothing
     if (!movieIdsTEMP.length == 0) {
       
+      // Call to TMDb and set
       async function fetchTMDbMovieInfo() {
         try {
           const response = await fetch(
@@ -267,15 +248,24 @@ const saveTagList = async (tagList, tagListName) => {
 
       fetchTMDbMovieInfo();  
     }
+    // This else hides an empty log when the page is initialized
     else {
-      console.log("Movie Info: ", movieInfoTMDb);
-    }
-    
+      // This extra if hides an empty log when the page is initialized
+      if (!movieInfoTMDb.length == 0) {
+        console.log("TMDb Movie Info: ", movieInfoTMDb);
+      }
+    }    
   }, [movieIdsTEMP]);
-
+  
+  // Trigger for when movieInfoTMDb is changed
+  // Filters out previously searched movieId
+  // This unfortunate loop between movieIdsTEMP and movieInfoTMDB is due to the setMovieInfoTMDb not saving until it's left the useEffect
   useEffect(() => {
-        
-    setMovieIdsTEMP(movieIdsTEMP.filter((m) => m !== movieIdsTEMP[0]));
+         
+    // This if hides an empty log when the page is initialized
+    if (!movieIdsTEMP.length == 0) {
+      setMovieIdsTEMP(movieIdsTEMP.filter((m) => m !== movieIdsTEMP[0]));
+    }
     
   }, [movieInfoTMDb]);
 
