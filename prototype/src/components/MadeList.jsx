@@ -14,7 +14,7 @@ const MadeList = ({ savedName, nametags, onRemove, onSelect }) => {
       <div className="flex flex-col items-start">
         <div className="flex space-x-4">
           <div className="text-white bg-black" style={{ whiteSpace: "nowrap" }}>
-            List {savedName}:
+            {savedName}:
           </div>
           {nametags.map((tag, index) => (
             <div

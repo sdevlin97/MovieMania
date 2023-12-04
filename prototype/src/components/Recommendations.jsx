@@ -39,13 +39,17 @@ const saveTagList = async (tagList, tagListName) => {
         let userID = String(user.uid);
   
         console.log("The list of tags is: ", tagList);
+        console.log("The passed in tagListName is: ", tagListName);
   
         // creates the tagList in the database
         const userRef = doc(db, "users", userID);
+
+        // tagList refers to the collection: if you change it you mess up the way we save tags
         const tagListColRef = collection(userRef, "tagList");
         const tagListDocRef = doc(tagListColRef, tagListName);
   
         setDoc(tagListDocRef, {
+          tagListName: tagListName,
           tagList: tagList
         });
         await updateDoc(doc(db, "users", userID), {wishlist: "true"});

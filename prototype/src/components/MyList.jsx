@@ -4,165 +4,64 @@ import MadeList from "./MadeList";
 import DevTag from "./DevTag";
 import Card from "./Card";
 import { auth, checkLoginState, db } from "../firebase.js";
-import { collection, doc, getDocs } from "firebase/firestore";
-
-// const SavedList = [
-//   {
-//     name: "Friend and me",
-//     nametags: [
-//       "Mind-Bending",
-//       "Epic Romance",
-//       "Sci-Fi Action",
-//       "Quentin Tarantino",
-//       "Time Travel",
-//       "Thriller",
-//       "Alternate Reality",
-//       "Existential",
-//       "Dystopian",
-//       "Cyberpunk",
-//       "Art House",
-//       "Surreal",
-//       "Mind-Bending",
-//       "Epic Romance",
-//       "Sci-Fi Action",
-//       "Quentin Tarantino",
-//       "Time Travel",
-//       "Thriller",
-//       "Alternate Reality",
-//       "Existential",
-//       "Dystopian",
-//       "Cyberpunk",
-//       "Art House",
-//       "Surreal",
-//     ],
-//   },
-//   {
-//     name: "Kids Fav",
-//     nametags: [
-//       "Sci-Fi Fantasy",
-//       "Dinosaur Adventure",
-//       "Space Opera",
-//       "Alien Invasion",
-//       "Superpowers",
-//       "Robots",
-//       "Post-Apocalyptic",
-//       "Virtual Reality",
-//       "Extraterrestrial",
-//       "Steampunk",
-//       "Mythology",
-//       "Time Loop",
-//       "Sci-Fi Fantasy",
-//       "Dinosaur Adventure",
-//       "Space Opera",
-//       "Alien Invasion",
-//       "Superpowers",
-//       "Robots",
-//       "Post-Apocalyptic",
-//       "Virtual Reality",
-//       "Extraterrestrial",
-//       "Steampunk",
-//       "Mythology",
-//       "Time Loop",
-//     ],
-//   },
-//   {
-//     name: "Crime Tags",
-//     nametags: [
-//       "Prison Drama",
-//       "Mafia Crime",
-//       "Undercover Cop",
-//       "Heist",
-//       "Organized Crime",
-//       "Gangster",
-//       "Neo-Noir",
-//       "Corruption",
-//       "Betrayal",
-//       "Revenge",
-//       "Psychological",
-//       "Caper",
-//       "Prison Drama",
-//       "Mafia Crime",
-//       "Undercover Cop",
-//       "Heist",
-//       "Organized Crime",
-//       "Gangster",
-//       "Neo-Noir",
-//       "Corruption",
-//       "Betrayal",
-//       "Revenge",
-//       "Psychological",
-//       "Caper",
-//     ],
-//   },
-//   {
-//     name: "Heros",
-//     nametags: [
-//       "Superhero",
-//       "Coming of Age",
-//       "Animated",
-//       "Mutants",
-//       "High School",
-//       "Inspirational",
-//       "Teen Drama",
-//       "Identity",
-//       "Empowerment",
-//       "Family",
-//       "Supernatural",
-//       "Friendship",
-//       "Superhero",
-//       "Coming of Age",
-//       "Animated",
-//       "Mutants",
-//       "High School",
-//       "Inspirational",
-//       "Teen Drama",
-//       "Identity",
-//       "Empowerment",
-//       "Family",
-//       "Supernatural",
-//       "Friendship",
-//     ],
-//   },
-//   {
-//     name: "For Later",
-//     nametags: [
-//       "Classic Comedy",
-//       "Historical Drama",
-//       "Mystery Thriller",
-//       "Film Noir",
-//       "Whodunit",
-//       "Screwball Comedy",
-//       "Satire",
-//       "Political Intrigue",
-//       "Conspiracy",
-//       "Romantic Comedy",
-//       "Action Adventure",
-//       "Spy",
-//       "Classic Comedy",
-//       "Historical Drama",
-//       "Mystery Thriller",
-//       "Film Noir",
-//       "Whodunit",
-//       "Screwball Comedy",
-//       "Satire",
-//       "Political Intrigue",
-//       "Conspiracy",
-//       "Romantic Comedy",
-//       "Action Adventure",
-//       "Spy",
-//     ],
-//   },
-// ];
+import { collection, doc, getDocs, deleteDoc } from "firebase/firestore";
+import { Slide, ToastContainer, toast } from "react-toastify";
 
 const MyList = () => {
   const [lists, setLists] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const handleRemoveList = (name) => {
-    setLists((prevLists) => prevLists.filter((list) => list.name !== name));
+  const deleteFromDatabase = async (savedName) => {
+    const toastId = "Database Deletion Status";
+
+    let boolCheck = checkLoginState();
+    if (boolCheck) {
+      console.log("the name of the list we are deleting is: ", savedName);
+      const user = auth.currentUser;
+      const userID = String(user.uid);
+      const userRef = doc(db, "users", userID);
+      const listColRef = collection(userRef, "tagList");
+      const listDocRef = doc(listColRef, savedName);
+      await deleteDoc(listDocRef);
+
+      toast.success(`${savedName} has been deleted from your tag lists!`, {
+        position: toast.POSITION.TOP_LEFT,
+        autoClose: 2000, //3 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        toastId,
+        transition: Slide,
+      });
+    } else {
+      toast.error(
+        "You must be logged in to view delete lists. You shouldn't be here",
+        {
+          position: toast.POSITION.TOP_LEFT,
+          autoClose: 2000, // 2 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          toastId,
+          transition: Slide,
+        }
+      );
+    }
+  };
+
+  const handleRemoveList = async (name) => {
+    try {
+      await deleteFromDatabase(name);
+      setLists((prevLists) => prevLists.filter((list) => list.name !== name));
+      console.log("Our new set of lists is: ", lists);
+    } catch (error) {
+      console.log("Error deleting list from database: ", error);
+    }
   };
 
   const handleSelectTags = (tags) => {
@@ -223,7 +122,7 @@ const MyList = () => {
           <p>Loading...</p>
         ) : error ? (
           <p>Error: {error.message}</p>
-        ) : data ? (
+        ) : lists ? (
           <div style={containerStyle} className="relative bg-black">
             <div className="flex justify-center items-center text-lg text-white h-20 bg-black">
               <h1 className="font-bold text-[60px]">Saved List</h1>
@@ -234,8 +133,9 @@ const MyList = () => {
                 key={index}
                 className="text-white flex items-center h-20 p-2 lg:px-4 bg- bg-black"
               >
-                <MadeList key={index}
-                  savedName={index + 1}
+                <MadeList
+                  key={index}
+                  savedName={object.tagListName}
                   nametags={object.tagList}
                   onRemove={handleRemoveList}
                   onSelect={handleSelectTags}
