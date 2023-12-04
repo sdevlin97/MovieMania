@@ -4,7 +4,8 @@ import { auth, checkLoginState, db } from "../firebase.js";
 import {
   collection,
   doc,
-  getDocs
+  getDocs,
+  deleteDoc
 } from "firebase/firestore";
 
 const WatchListCard = () => {
@@ -14,6 +15,31 @@ const WatchListCard = () => {
   const [selectedMovies, setSelectedMovies] = useState([]);
   const scrollContainerRef = useRef(null);
 
+    // Move fetchMovieListFromDatabase to WatchListCard.jsx
+    const fetchMovieListFromDatabase = async () => {
+      let boolCheck = checkLoginState();
+  
+      const user = auth.currentUser;
+      console.log("The current user id is: ", auth.currentUser);
+      let userID = String(user.uid);
+  
+      if (boolCheck) {
+        console.log("The boolcheck is: ", boolCheck);
+        const docRef = doc(db, "users", userID);
+        const watchListColRef = collection(docRef, "watchList");
+        const docsSnap = await getDocs(watchListColRef);
+  
+        const fetchedData = [];
+        docsSnap.forEach((doc) => {
+          console.log("The document data is: ", doc.data());
+          fetchedData.push(doc.data());
+          console.log("the data in fetchedData is: ", fetchedData);
+        });
+  
+        return fetchedData;
+      }
+    };
+
   const addData = (newData) => {
     setData(prevData => {
       // Ensure prevData is initialized as an empty array if it's undefined
@@ -21,6 +47,27 @@ const WatchListCard = () => {
       return updatedData;
     });
   };
+
+    // Function to remove a movie from the watchlist
+    const removeMovieFromWatchlist = async (movieId) => {
+      try {
+        const user = auth.currentUser;
+        let userID = String(user.uid);
+  
+        const docRef = doc(db, "users", userID);
+        const watchListColRef = collection(docRef, "watchList");
+        const movieDocRef = doc(watchListColRef, movieId);
+  
+        // Remove the movie document from the watchlist collection
+        await deleteDoc(movieDocRef);
+  
+        // Fetch the updated watchlist data and set it in the state
+        const updatedWatchlist = await fetchMovieListFromDatabase();
+        setData(updatedWatchlist);
+      } catch (error) {
+        console.error("Error removing movie from watchlist:", error);
+      }
+    };
 
   useEffect(() => {
     async function fetchMovieListFromDatabase() {
@@ -135,7 +182,8 @@ const WatchListCard = () => {
                   <p className="text-gray-400 text-sm text-center">
                     Rating: {movie.vote_average}
                   </p>
-                  <button className="bg-black hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded">
+                  <button className="bg-black hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded"
+                  onClick={() => removeMovieFromWatchlist(movie.movie_id)}>
                     Remove
                   </button>
                 </div>
