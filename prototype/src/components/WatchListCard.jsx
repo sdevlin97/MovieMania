@@ -13,16 +13,7 @@ const WatchListCard = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedMovies, setSelectedMovies] = useState([]);
   const scrollContainerRef = useRef(null);
-
-  const addData = (newData) => {
-    setData(prevData => {
-      // Ensure prevData is initialized as an empty array if it's undefined
-      const updatedData = prevData ? [...prevData, newData] : [newData];
-      return updatedData;
-    });
-  };
 
   const handleDeleteMovie = async (title) => {
     await deleteMovieFromWatchlist(title);
@@ -34,7 +25,6 @@ const WatchListCard = () => {
 
     let boolCheck = checkLoginState();
     if (boolCheck) {
-      console.log("the name of the movie we are deleting is: ", title);
       const user = auth.currentUser;
       const userID = String(user.uid);
       const userRef = doc(db, "users", userID);
@@ -74,21 +64,16 @@ const WatchListCard = () => {
       let boolCheck = checkLoginState();
 
       const user = auth.currentUser;
-      console.log("The current user id is: ", auth.currentUser);
       let userID = String(user.uid);
 
       if (boolCheck) {
-        console.log("The boolcheck is: ", boolCheck);
         const docRef = doc(db, "users", userID);
         const watchListColRef = collection(docRef, "watchList");
         const docsSnap = await getDocs(watchListColRef);
 
         const fetchedData = [];
         docsSnap.forEach((doc) => {
-          console.log("The document data is: ", doc.data());
-          // addData(doc.data());
           fetchedData.push(doc.data());
-          console.log("the data in fetchedData is: ", fetchedData);
         });
 
         return fetchedData;
@@ -98,13 +83,9 @@ const WatchListCard = () => {
     async function fetchData() {
       try {
         const response = await fetchMovieListFromDatabase();
-        // const jsonData = JSON.parse(response);
-        // console.log("The response before we convert to json data is: ", jsonData);
-      console.log("The response is: ", response);
         setData(response);
         setLoading(false);
       } catch (error) {
-        console.log("The error in our catch block is: ", error);
         setError(error);
         setLoading(false);
       }
@@ -112,14 +93,6 @@ const WatchListCard = () => {
 
     fetchData();
   }, []);
-
-  const handleMovieSelect = (movie) => {
-    if (selectedMovies.includes(movie)) {
-      setSelectedMovies(selectedMovies.filter((m) => m !== movie));
-    } else {
-      setSelectedMovies([...selectedMovies, movie]);
-    }
-  };
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
@@ -144,7 +117,7 @@ const WatchListCard = () => {
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
-        <p>Siobahn!! Error: {error.message}</p>
+        <p>Error: {error.message}</p>
       ) : data ? (
         <div className="relative">
           <button

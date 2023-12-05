@@ -1,3 +1,4 @@
+/* eslint-disable no-inner-declarations */
 import Card from "./Card";
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -147,16 +148,22 @@ function Browse() {
           switch(counter){
             case 1:
               setMovieInfoTMDbAction(movieInfoTMDb);
+              break;
             case 2:
               setMovieInfoTMDbAnimation(movieInfoTMDb);
+              break;
             case 3:
               setMovieInfoTMDbComedy(movieInfoTMDb);
+              break;
             case 4:
               setMovieInfoTMDbFantasy(movieInfoTMDb);
+              break;
             case 5:
               setMovieInfoTMDbHorror(movieInfoTMDb);
+              break;
             case 6:
               setMovieInfoTMDbRomance(movieInfoTMDb);
+              break;
           }
           setCounter(counter+1);
           setTagsSelectedTEMP(tagsSelectedTEMP.filter((m) => m !== tagsSelectedTEMP[0]));

@@ -1,3 +1,4 @@
+/* eslint-disable no-inner-declarations */
 import React, { useState, useEffect, useCallback } from "react";
 import MadeList from "./MadeList";
 //DevTag is a diffrent way to get tags , you can remove it and use Tags component only or same in reverse
@@ -54,7 +55,6 @@ const MyList = () => {
 
     let boolCheck = checkLoginState();
     if (boolCheck) {
-      console.log("the name of the list we are deleting is: ", savedName);
       const user = auth.currentUser;
       const userID = String(user.uid);
       const userRef = doc(db, "users", userID);
@@ -97,7 +97,6 @@ const MyList = () => {
     async function fetchData() {
       try {
         const response = await fetchTagListFromDatabase();
-        console.log("The response is: ", response);
         setLists(response);
         setLoading(false);
       } catch (error) {
