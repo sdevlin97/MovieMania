@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import Modal from "./Modal";
 import Card from "./Card.jsx";
+import axios from 'axios';
 import { auth, checkLoginState, db } from "../firebase.js"
 import { getFirestore, collection, addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
 
@@ -12,6 +13,12 @@ const Details = () => {
   const [loading, setLoading] = useState(true); // Optionally, you can track loading state
   const [error, setError] = useState(null); // Optionally, track any errors
   const [showTrailer, setShowTrailer] = useState(false);
+  const [tagsSelected, setTagsSelected] = useState([]); // Array of strings - Tags that have been selected
+  const [movieIdML, setMovieIdML] = useState([]); // Array of objects [key (ML movieid): doc_count (# of instances)] - Movieids returned from searching with tagsSelected
+  const [movieIdsML, setMovieIdsML] = useState([]); // Array of objects [key (ML movieid): doc_count (# of instances)] - Movieids returned from searching with tagsSelected
+  const [movieIdsTMDb, setMovieIdsTMDb] = useState([]); // Array of objects including ID for TMDb
+  const [movieIdsTEMP, setMovieIdsTEMP] = useState([]); // Temp duplicate of movieIdsTMDb, in case we later need the full list to still be preserved
+  const [movieInfoTMDb, setMovieInfoTMDb] = useState([]); // Array of objects - Info for movies from TMDb
 
   // API Call to get details for a given movie
   function createGenreString(data) {
@@ -23,14 +30,14 @@ const Details = () => {
     let boolCheck = checkLoginState()
     console.log("The checked login state is: ", boolCheck);
     if (boolCheck) {
-        //add wishlist firebase code here
+        //add watchlist firebase code here
         let movieId = id;
         const user = auth.currentUser;
         let userID = String(user.uid);
         
         console.log("The movie ID is: ", movieId);
         console.log("The movie title is: ", title);
-        // Creates the custom wishlist and adds data in the database
+        // Creates the custom watchlist and adds data in the database
         const userRef = doc(db, "users", userID);
         const watchlistColRef = collection(userRef, "watchList");
         const watchlistDocRef = doc(watchlistColRef, title);
@@ -56,7 +63,7 @@ const Details = () => {
 
     } else {
         // don't add logic to buttons
-        alert("You must be logged in to add to your Watchlist.")
+        alert("You must be logged in to add to your Watchlist.");
     }
   }
 
@@ -82,7 +89,196 @@ const Details = () => {
     }
 
     fetchData();
+    
+    // Clears movieInfoTMDb between pages
+    setMovieInfoTMDb([]);
+
+    // Uses TMDb movieId from page to search Elastic for ML movieId, sets returned object (movieid) to setMovieIdML
+    const fetchMLIdFromTMDb = () => {
+
+      // Call to Elastic and set
+      const results = {
+        method: 'GET',
+        url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchMLIdFromTMDb',
+        params: {
+          movieid: id
+        }
+      };
+      axios
+        .request(results)
+        .then((response) => {
+          console.log(response.data);
+          setMovieIdML(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
+    fetchMLIdFromTMDb();
   }, [id]);
+
+  // Trigger for when movieIdML is changed
+  // Searches for tags associated with movieid
+  useEffect(() => {
+    
+    // Elastic won't accept blank search inputs, so if blank = do nothing
+    if (!movieIdML.length == 0) {
+
+      // Calls Elasticsearch for tags associated with movieid, sets returned list of objects (tag) to setTagsSelected
+      const fetchNewTags = () => {
+        
+        // Call to Elastic and set
+        const results = {
+          method: 'GET',
+          url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchNewTagsDetails',
+          params: {
+            movieids: movieIdML[0]._source.movieId
+          }
+        };
+        axios
+          .request(results)
+          .then((response) => {
+            console.log(response.data);
+            setTagsSelected(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
+      fetchNewTags();
+    }
+  }, [movieIdML]);
+  
+  // Trigger for when tagsSelected is changed
+  // Returns ML movieids based on selectedTags
+  useEffect(() => {
+
+    // Elastic won't accept blank search inputs, so if blank = do nothing
+    if (!tagsSelected.length == 0) {
+
+      // Sends list of selected tags to Elasticsearch to search, sets returned list of objects (movieid) to movieIdsML
+      const fetchMLIds = () => {
+
+        // Create string for parameter transfer as we're transferring multiple items under the same parameter name
+        var stringTags = "";
+        for (const value of tagsSelected) {
+          stringTags = stringTags + value.key + " ";
+        }
+
+        // Call to Elastic and set
+        const results = {
+          method: 'GET',
+          url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchMLIdsDetails',
+          params: {
+            tags: stringTags,
+            movieid: movieIdML[0]._source.movieId
+          }
+        };
+        axios
+          .request(results)
+          .then((response) => {
+            console.log(response.data);
+            setMovieIdsML(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
+      fetchMLIds();
+    }
+  }, [tagsSelected]);
+
+  // Trigger for when movieIdsML is changed
+  // Uses movieids in movieIdsML to search for TMDb movieIds and set to movieIdsTMDb, duplicated to movieIdsTEMP for loop-removing ids later
+  useEffect(() => {
+    
+    // Elastic won't accept blank search inputs, so if blank = do nothing
+    if (!movieIdsML.length == 0) {
+      
+      // Calls Elasticsearch for tags associated with movieids, sets returned list of objects (tag) to setTagsAvailable
+      const fetchTMDbIds = () => {
+        
+        // Create string for parameter transfer as we're transferring multiple items under the same parameter name
+        var stringMovieIds = "";
+        for (const value of movieIdsML) {
+          stringMovieIds = stringMovieIds + value.key + " ";
+        }
+
+        // Call to Elastic and set
+        const results = {
+          method: 'GET',
+          url: 'https://us-central1-moviemania-ba604.cloudfunctions.net/app/fetchTMDbIds',
+          params: {
+            movieids: stringMovieIds
+          }
+        };
+        axios
+          .request(results)
+          .then((response) => {
+            console.log(response.data);
+            setMovieIdsTMDb(response.data);
+            setMovieIdsTEMP(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      };
+
+      fetchTMDbIds();
+    }
+  }, [movieIdsML]);
+
+  // Trigger for when movieIdsTEMP is changed
+  // Uses TMDb movieids in movieIdsTEMP to return movie info details from TMDb
+  useEffect(() => {
+        
+    if (!movieIdsTEMP.length == 0) {
+      
+      // Call to TMDb and set
+      async function fetchTMDbMovieInfo() {
+        try {
+          const response = await fetch(
+            `https://us-central1-moviemania-ba604.cloudfunctions.net/app/movieDetails/${movieIdsTEMP[0]._source.tmdbId}`
+          );
+    
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const result = await response.json();
+          console.log("The movie details we got is: ", result);
+          setMovieInfoTMDb([...movieInfoTMDb, result]);
+          setLoading(false);
+        } catch (error) {
+          setError(error);
+          setLoading(false);
+        }
+      }      
+
+      fetchTMDbMovieInfo();  
+    }
+    // This else hides an empty log when the page is initialized
+    else {
+      // This extra if hides an empty log when the page is initialized
+      if (!movieInfoTMDb.length == 0) {
+        console.log("TMDb Movie Info: ", movieInfoTMDb);
+      }
+    }    
+  }, [movieIdsTEMP]);
+  
+  // Trigger for when movieInfoTMDb is changed
+  // Filters out previously searched movieId
+  // This unfortunate loop between movieIdsTEMP and movieInfoTMDB is due to the setMovieInfoTMDb not saving until it's left the useEffect
+  useEffect(() => {
+         
+    // This if hides an empty log when the page is initialized
+    if (!movieIdsTEMP.length == 0) {
+      setMovieIdsTEMP(movieIdsTEMP.filter((m) => m !== movieIdsTEMP[0]));
+    }
+    
+  }, [movieInfoTMDb]);
 
   return (
     <div>
@@ -147,7 +343,9 @@ const Details = () => {
           <h1 className="tracking-[.50em] mt-2 font-bold text-center text-[30px] text-white">
             Similar Movies
           </h1>
-          <Card></Card>
+          <Card
+            movieInfoTMDb={movieInfoTMDb}
+          />
           <Modal isOpen={showTrailer} toggleModal={() => setShowTrailer(false)}>
             <iframe
               width="100%"

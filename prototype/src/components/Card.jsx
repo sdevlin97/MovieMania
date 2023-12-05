@@ -2,45 +2,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 
-const Card = () => {
-  const [data, setData] = useState(null); // Initialize the state with null or an initial value
-  const [loading, setLoading] = useState(true); // Optionally, you can track loading state
-  const [error, setError] = useState(null); // Optionally, track any errors
-
-  const [selectedMovies, setSelectedMovies] = useState([]);
+const Card = ({movieInfoTMDb}) => {
   const scrollContainerRef = useRef(null);
-
-  useEffect(() => {
-    // Gets Popular Movies
-    async function fetchData() {
-      try {
-        const response = await fetch(
-          `https://us-central1-moviemania-ba604.cloudfunctions.net/app/popularMovies`
-        );
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        setData(result);
-        setLoading(false);
-      } catch (error) {
-        setError(error);
-        setLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  const handleMovieSelect = (movie) => {
-    // Toggle the selected state of the movie
-    if (selectedMovies.includes(movie)) {
-      setSelectedMovies(selectedMovies.filter((m) => m !== movie));
-    } else {
-      setSelectedMovies([...selectedMovies, movie]);
-    }
-  };
 
   const scrollRight = () => {
     if (scrollContainerRef.current) {
@@ -62,11 +25,7 @@ const Card = () => {
 
   return (
     <div>
-      {loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>Error: {error.message}</p>
-      ) : data ? (
+      {movieInfoTMDb && (
         <div className="relative">
           <button
             className="absolute left-0 top-1/2 transform -translate-y-1/2 backdrop-blur-none text-white px-[12px] py-[50px] rounded-md hover:bg-black z-10 text-lg font-black"
@@ -85,7 +44,7 @@ const Card = () => {
             ref={scrollContainerRef}
           >
             <div className="flex space-x-4 p-4 pr-16">
-              {data.results.map((movie, index) => (
+              {movieInfoTMDb.map((movie, index) => (
                 <div className="flex flex-col items-center p-4 rounded-lg shadow-md backdrop-blur-0 inline-block">
                   <Link to={`/details/${movie.id}`}>
                     <img
@@ -108,7 +67,7 @@ const Card = () => {
             </div>
           </div>
         </div>
-      ) : null}
+        )}
     </div>
   );
 };
