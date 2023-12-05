@@ -79,7 +79,7 @@ const saveTagList = async (tagList, tagListName) => {
     }
   
   // Trigger for when tagsSelected is changed
-  // Loads default ML movieids or returns ML movieids based on selectedTags
+  // Loads default ML movieids or returns ML movieids based on tagsSelected
   useEffect(() => {
     setMovieInfoTMDb([]);
 
