@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { auth, checkLoginState, db } from "../firebase.js";
+import { Slide, ToastContainer, toast } from "react-toastify";
 import {
   collection,
   doc,
-  getDocs
+  getDocs,
+  deleteDoc
 } from "firebase/firestore";
 
 const WatchListCard = () => {
@@ -21,6 +23,51 @@ const WatchListCard = () => {
       return updatedData;
     });
   };
+
+  const handleDeleteMovie = async (title) => {
+    await deleteMovieFromWatchlist(title);
+    setData((prevLists) => prevLists.filter((list) => list.movie_title !== title));
+  };
+
+  async function deleteMovieFromWatchlist(title) {
+    const toastId = "Movie Deletion Status";
+
+    let boolCheck = checkLoginState();
+    if (boolCheck) {
+      console.log("the name of the movie we are deleting is: ", title);
+      const user = auth.currentUser;
+      const userID = String(user.uid);
+      const userRef = doc(db, "users", userID);
+      const listColRef = collection(userRef, "watchList");
+      const listDocRef = doc(listColRef, title);
+      await deleteDoc(listDocRef);
+
+      toast.success(`${title} has been deleted from your watch list!`, {
+        position: toast.POSITION.TOP_LEFT,
+        autoClose: 2000, // 2 seconds
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        toastId,
+        transition: Slide,
+      });
+    } else {
+      toast.error(
+        "You must be logged in to delete movies. You shouldn't be here",
+        {
+          position: toast.POSITION.TOP_LEFT,
+          autoClose: 2000, // 2 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          toastId,
+          transition: Slide,
+        }
+      );
+    }
+  }
 
   useEffect(() => {
     async function fetchMovieListFromDatabase() {
@@ -135,7 +182,10 @@ const WatchListCard = () => {
                   <p className="text-gray-400 text-sm text-center">
                     Rating: {movie.vote_average}
                   </p>
-                  <button className="bg-black hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded">
+                  <button
+                  className="bg-black hover:bg-red-600 text-white font-bold mt-2 py-2 px-4 rounded"
+                  onClick= {() => handleDeleteMovie(movie.movie_title) }
+                  >
                     Remove
                   </button>
                 </div>

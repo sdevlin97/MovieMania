@@ -1,3 +1,4 @@
+/* eslint-disable no-inner-declarations */
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
@@ -6,6 +7,7 @@ import Card from "./Card.jsx";
 import axios from 'axios';
 import { auth, checkLoginState, db } from "../firebase.js"
 import { getFirestore, collection, addDoc, doc, setDoc, updateDoc } from "firebase/firestore";
+import { Slide, ToastContainer, toast } from "react-toastify";
 
 const Details = () => {
   const { id } = useParams();
@@ -30,10 +32,10 @@ const Details = () => {
     let boolCheck = checkLoginState()
     console.log("The checked login state is: ", boolCheck);
     if (boolCheck) {
-        //add watchlist firebase code here
         let movieId = id;
         const user = auth.currentUser;
         let userID = String(user.uid);
+        const toastId = "Movie Added to Watchlist alert"
         
         console.log("The movie ID is: ", movieId);
         console.log("The movie title is: ", title);
@@ -53,17 +55,32 @@ const Details = () => {
             overview: overview,
             vote_average: vote_average
         });
-
-        // Add field to user document keeping track of what list collections we have
-        // created in the database to be referenced in the settings.js
-
         await updateDoc(doc(db, "users", userID), {wishlist: "true"});
 
-        alert(`${title} has been added to your Watchlist`);
+        toast.success(`${title} has been added to your Watchlist`, {
+          position: toast.POSITION.TOP_LEFT,
+          autoClose: 2000, // 2 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          toastId,
+          transition: Slide,
+        });
 
     } else {
-        // don't add logic to buttons
+        const toastId = "Add to watchlist error alert";
         alert("You must be logged in to add to your Watchlist.");
+        toast.error("You must be logged in to add to your Watchlist.", {
+          position: toast.POSITION.TOP_LEFT,
+          autoClose: 2000, // 2 seconds
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          toastId,
+          transition: Slide,
+        });
     }
   }
 
