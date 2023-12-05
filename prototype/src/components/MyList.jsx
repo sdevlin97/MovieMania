@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import MadeList from "./MadeList";
 //DevTag is a diffrent way to get tags , you can remove it and use Tags component only or same in reverse
 import DevTag from "./DevTag";
@@ -10,9 +10,39 @@ import { Slide, ToastContainer, toast } from "react-toastify";
 const MyList = () => {
   const [lists, setLists] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
-  // const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  async function fetchTagListFromDatabase() {
+    let boolCheck = checkLoginState();
+
+    const user = auth.currentUser;
+    let userID = String(user.uid);
+
+    if (boolCheck) {
+      const docRef = doc(db, "users", userID);
+      const watchListColRef = collection(docRef, "tagList");
+      const docsSnap = await getDocs(watchListColRef);
+
+      const fetchedData = [];
+      docsSnap.forEach((doc) => {
+        console.log("The tagList is: ", doc.data());
+        fetchedData.push(doc.data());
+        console.log("the taglist in fetchedData is: ", fetchedData);
+      });
+
+      return fetchedData;
+    }
+  }
+
+  const handleRemoveList = async (name) => {
+    try {
+      await deleteFromDatabase(name);
+      setLists((prevLists) => prevLists.filter((list) => list.tagListName !== name));
+    } catch (error) {
+      console.log("Error deleting list from database: ", error);
+    }
+  };
 
   const deleteFromDatabase = async (savedName) => {
     const toastId = "Database Deletion Status";
@@ -29,7 +59,7 @@ const MyList = () => {
 
       toast.success(`${savedName} has been deleted from your tag lists!`, {
         position: toast.POSITION.TOP_LEFT,
-        autoClose: 2000, //3 seconds
+        autoClose: 2000, // 2 seconds
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -54,43 +84,11 @@ const MyList = () => {
     }
   };
 
-  const handleRemoveList = async (name) => {
-    try {
-      await deleteFromDatabase(name);
-      setLists((prevLists) => prevLists.filter((list) => list.name !== name));
-      console.log("Our new set of lists is: ", lists);
-    } catch (error) {
-      console.log("Error deleting list from database: ", error);
-    }
-  };
-
   const handleSelectTags = (tags) => {
     setSelectedTags(tags);
   };
 
   useEffect(() => {
-    async function fetchTagListFromDatabase() {
-      let boolCheck = checkLoginState();
-
-      const user = auth.currentUser;
-      let userID = String(user.uid);
-
-      if (boolCheck) {
-        const docRef = doc(db, "users", userID);
-        const watchListColRef = collection(docRef, "tagList");
-        const docsSnap = await getDocs(watchListColRef);
-
-        const fetchedData = [];
-        docsSnap.forEach((doc) => {
-          console.log("The tagList is: ", doc.data());
-          fetchedData.push(doc.data());
-          console.log("the taglist in fetchedData is: ", fetchedData);
-        });
-
-        return fetchedData;
-      }
-    }
-
     async function fetchData() {
       try {
         const response = await fetchTagListFromDatabase();
