@@ -1,5 +1,4 @@
 // Recommendations.jsx
-import React, { useState } from "react";
 /* eslint-disable no-inner-declarations */
 import Tags from "./Tags";
 import Card from "./Card";
@@ -284,19 +283,6 @@ const saveTagList = async (tagList, tagListName) => {
     } else if (action === "remove") {
       setTagsSelected(tagsSelected.filter((m) => m !== tag));
     }    
-  };
-
-  const [availableTags, setAvailableTags] = useState(AllTags);
-  const [selectedTags, setSelectedTags] = useState([]);
-
-  const handleTagClick = (tagName, action) => {
-    if (action === "add") {
-      setSelectedTags([...selectedTags, tagName]);
-      setAvailableTags(availableTags.filter((tag) => tag.name !== tagName));
-    } else if (action === "remove") {
-      setSelectedTags(selectedTags.filter((tag) => tag !== tagName));
-      setAvailableTags([...availableTags, { name: tagName }]);
-    }
   };
 
   return (
