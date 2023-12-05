@@ -225,4 +225,107 @@ app.get("/fetchTMDbIds", (req, res) => {
   sendESRequest();
 });
 
+// Call to Elasticsearch, searches for passed MovieLens movieids and returns movieids for IMDb and TMDb
+// Returns 20 objects (we only need _source.tmdbId)
+app.get("/fetchMLIdFromTMDb", (req, res) => {
+  passedMovieId = req.query.movieid;
+
+  async function sendESRequest() {
+    const body = await client.search({
+      index: "moviemania_links_v2",
+      body: {
+        query: {
+          term: {
+            tmdbId: {
+              value: passedMovieId
+            }
+          }
+        }
+      }
+    });
+    res.json(body.hits.hits);
+  }
+  sendESRequest();
+});
+
+// Call to Elasticsearch, searches for passed movieids and returns tags in order of highest use amongst the movieids, shortened size to 10 for closer accuracy
+// Returns 20 objects of key (tag name) : doc_count (number of times tag was associated with the passed movieids)
+app.get("/fetchNewTagsDetails", (req, res) => {
+  passedMovieIds = req.query.movieids;
+
+  async function sendESRequest() {
+    const body = await client.search({
+      index: "moviemania_tags_v3",
+      body: {
+        size: 10,
+        query: {
+          bool: {
+            should: [
+              {
+                match: {
+                  movieid: passedMovieIds
+                }
+              }
+            ]
+          }
+        },
+        aggs: {
+          by_tags: {
+            terms: {
+              field: "tag.keyword",
+              size: 10
+            }
+          }
+        }
+      }
+    });
+    res.json(body.aggregations.by_tags.buckets);
+  }
+  sendESRequest();
+});
+
+// Call to Elasticsearch, searches for passed (selected) tags and returns movieids in order of most connections to tags, filters out original movieid
+// Returns 20 objects of key (movieid) : doc_count (number of times movieid was tagged with selected tags)
+app.get("/fetchMLIdsDetails", (req, res) => {
+  passedTags = req.query.tags;
+  passedMovieId = req.query.movieid;
+
+  async function sendESRequest() {
+    const body = await client.search({
+      index: "moviemania_tags_v3",
+      body: {
+        size: 20,
+        query: {
+          bool: {
+            should: [
+              {
+                match: {
+                  tag: passedTags
+                }
+              }
+            ],
+            must_not: [
+              {
+                match: {
+                  movieid: passedMovieId
+                }
+              }
+            ]
+          }
+        },
+        aggs: {
+          by_movieid: {
+            terms: {
+              field: "movieid.keyword",
+              size: 20
+            }
+          }
+        }
+      }
+    });
+    res.json(body.aggregations.by_movieid.buckets);
+  }
+  sendESRequest();
+});
+
 exports.app = functions.https.onRequest(app);
