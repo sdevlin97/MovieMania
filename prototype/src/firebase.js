@@ -36,31 +36,11 @@ export function checkLoginState() {
       }
   }
 
-  /*
-   createUserWithEmailAndPassword(auth, email, password)
-    .then(async (userCredential) => {
-      // Signed in
-      const user = auth.currentUser;
-      let id = String(user.uid);
-      localStorage.setItem('email', email);
-      
-      let loginAnchor = document.querySelector(".login-name__anchor");
-      loginAnchor.innerHTML = email;
-
-      await setDoc(doc(db, "users", id), {
-        email: email,
-        wishlist: "false",
-        backlog: "false"
-      });
-
-      */
-
 export function createAccount(auth, username, email, password) {
   createUserWithEmailAndPassword(auth, email, password)
   .then(async (userCredential) => {
     // account creation success; user is now logged in
     const user = userCredential.user;
-    let id = String(user.uid);
     console.log("User account creation successful! The user is: ", user.email);
     // add user to Firestore database
     addNewUserToDatabase(db, user, username)
@@ -123,8 +103,6 @@ async function addNewUserToDatabase(db, user, username) {
     await setDoc(doc(db, "users", String(user.uid)), {
       username: username,
       email: user.email,
-      watchList: [],
-      tagList: []
     });
     console.log("Document has been written")
     console.log("Document written with ID: ", user.uid);
