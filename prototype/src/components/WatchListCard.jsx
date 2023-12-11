@@ -198,6 +198,6 @@ const WatchListCard = () => {
       ) : null}
     </div>
   );
-};
-
+});
+}
 export default WatchListCard;
